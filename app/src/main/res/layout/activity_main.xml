@@ -7,8 +7,14 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-    <com.google.android.material.navigation.NavigationView
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_navigation"
         android:layout_width="match_parent"
-        android:layout_height="58dp"
-        android:background="#009688" />
+        android:layout_height="64dp"
+        android:background="#00CB82" />
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

@@ -15,13 +15,11 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        ListView listView = findViewById(R.id.list_name);
         SearchView searchView = findViewById(R.id.nameSearch);
 
         String[] messages = {"Gia", "Dang", "Hau", "Kiet"};
 
         adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, messages);
-        listView.setAdapter(adapter);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
