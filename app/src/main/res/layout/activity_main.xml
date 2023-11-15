@@ -7,6 +7,10 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+
+
+
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_navigation"
         android:layout_width="match_parent"

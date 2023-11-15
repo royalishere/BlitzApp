@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1093518124011",
+    "firebase_url": "https://blitz-chat-app-9262f-default-rtdb.firebaseio.com",
+    "project_id": "blitz-chat-app-9262f",
+    "storage_bucket": "blitz-chat-app-9262f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1093518124011:android:5a9821a1833c5cb4462fae",
+        "android_client_info": {
+          "package_name": "com.example.blitz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1093518124011-mek9dgfet42ljbvqoub64u8i8p7lp1uq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7OpujG-E5yqx3mFmqmZbaka2EI3YZjgQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1093518124011-mek9dgfet42ljbvqoub64u8i8p7lp1uq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
