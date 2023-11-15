@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Blitz</string>
     <string name="title_activity_search">SearchActivity</string>
+    <string name="web_client_id">1093518124011-tdgl3qldv9e02kmgcsu0v3hjtcavm4vo.apps.googleusercontent.com</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>

@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.blitz.Fragment.ChatsFragment;
 import com.example.blitz.Fragment.ContactsFragment;
+import com.example.blitz.Fragment.ProfileFragment;
 
 public class FragmentsAdapter extends FragmentPagerAdapter {
     public FragmentsAdapter(@NonNull FragmentManager fragment) {
@@ -18,6 +19,7 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
         switch (position){
             case 0: return new ChatsFragment();
             case 1: return new ContactsFragment();
+            case 2: return new ProfileFragment();
             default: return null;
         }
     }
@@ -27,10 +29,11 @@ public class FragmentsAdapter extends FragmentPagerAdapter {
         switch (position){
             case 0: return "Chats";
             case 1: return "Contacts";
+            case 2: return "Profile";
             default: return null;
         }
     }
 
     @Override
-    public int getCount() { return 2; }
+    public int getCount() { return 3  ; }
 }

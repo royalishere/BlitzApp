@@ -27,14 +27,15 @@
                 <ImageView
                     android:id="@+id/imageView"
                     android:layout_width="match_parent"
-                    android:layout_height="133dp"
+                    android:layout_height="70dp"
                     android:scaleType="fitXY"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/top_background" />
+                    app:srcCompat="@drawable/top_background"
+                    />
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/avt"
                     android:layout_width="140dp"
                     android:layout_height="117dp"
@@ -42,14 +43,16 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/imageView"
                     app:layout_constraintTop_toBottomOf="@+id/imageView"
-                    app:srcCompat="@drawable/hacker" />
+                    android:src="@drawable/hacker"
+                    app:civ_border_color="#FF000000"
+                    app:civ_border_width="1dp"/>
 
                 <TextView
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Pham Dang"
+                    android:text="User Name"
                     android:textSize="25sp"
                     android:textStyle="bold"
 
@@ -61,7 +64,7 @@
                     android:id="@+id/tvEmail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="linhtinh@gmail.com"
+                    android:text="example@gmail.com"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="@+id/tvUserName"
                     app:layout_constraintStart_toStartOf="@+id/tvUserName"
@@ -69,7 +72,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="404dp"
+                    android:layout_height="472dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +97,7 @@
                         android:textStyle="bold" />
                     -->
                     <Button
-                        android:id="@+id/btn_info"
+                        android:id="@+id/btn_Profile"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
                         android:layout_marginStart="32dp"
@@ -104,7 +107,7 @@
                         android:backgroundTint="#00CB82"
                         android:drawableLeft="@drawable/list_two_svgrepo_com"
                         android:drawablePadding="20dp"
-                        android:text="Infomation"
+                        android:text="Profile"
                         android:textAlignment="viewStart"
                         android:textColor="@color/black"
                         android:textSize="18sp"
@@ -128,6 +131,42 @@
                         android:textStyle="bold" />
 
                     <Button
+                        android:id="@+id/btn_privacy"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="#00CB82"
+                        android:drawableLeft="@drawable/sign_out_2_svgrepo_com"
+                        android:drawablePadding="20dp"
+                        android:text="Privacy Policy"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btn_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginBottom="10dp"
+                        android:backgroundTint="#00CB82"
+                        android:drawableLeft="@drawable/sign_out_2_svgrepo_com"
+                        android:drawablePadding="20dp"
+                        android:text="About Us"
+                        android:textAlignment="viewStart"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <Button
                         android:id="@+id/btn_logout"
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
@@ -145,21 +184,7 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <Button
-                        android:id="@+id/btn_back_mainpage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="60dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="32dp"
-                        android:backgroundTint="#00CB79"
-                        android:drawableLeft="@drawable/caret_left_back_previous_west_svgrepo_com"
-                        android:paddingRight="30dp"
-                        android:text="Back to Main page"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
