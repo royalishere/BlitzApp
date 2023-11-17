@@ -119,28 +119,17 @@ public class ProfileFragment extends Fragment {
         tvEmail = (TextView) layout_profile.findViewById(R.id.tvEmail);
         avt = (ImageView) layout_profile.findViewById(R.id.avt);
 
-//
-//        tvEmail.setText(auth.getCurrentUser().getEmail());
-//
-//        // Get the current user id
-//        String id = auth.getCurrentUser().getUid();
-//        // Get the current user data
-//        DatabaseReference reference = database.getReference().child("Users");
-//        Query checkUser = reference.orderByChild("id").equalTo(id);
-//        checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot snapshot) {
-//                if(snapshot.exists()){
-//                    Users user = snapshot.child(id).child("userName").getValue( Users.class);
-//                    tvUsername.setText(user.getUserName());
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//
-//            }
-//        });
+        //get the profile picture from storage
+        StorageReference reference = storage.getReference().child("profile_pictures").child(FirebaseAuth.getInstance().getUid());
+        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Picasso.get().load(uri).into(avt);
+            }
+        });
+
+        //if user login with google
+        //get the username and email from google to display
         gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN) .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
@@ -174,30 +163,7 @@ public class ProfileFragment extends Fragment {
 
         }
 
-        avt = (ImageView) layout_profile.findViewById(R.id.avt);
-        // load url image to imageview
-        StorageReference ref = storage.getReference();
-        ref.child("profile_pictures/" + auth.getCurrentUser().getUid()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(avt);
-            }
-        });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        //click logout
         btnLogout = (Button) layout_profile.findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,6 +185,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        //click change profile
         btnChangeProfile = (Button) layout_profile.findViewById(R.id.btn_Profile);
         btnChangeProfile.setOnClickListener(new View.OnClickListener() {
             @Override
