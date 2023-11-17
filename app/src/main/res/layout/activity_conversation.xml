@@ -64,7 +64,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ListView
-        android:id="@+id/message"
+        android:id="@+id/messages"
         android:layout_width="match_parent"
         android:layout_height="600dp"
         android:layout_alignParentBottom="true"
@@ -73,7 +73,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/message"
+        android:layout_alignBottom="@id/messages"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal">
 

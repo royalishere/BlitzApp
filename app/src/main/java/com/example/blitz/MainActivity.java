@@ -31,10 +31,6 @@ public class MainActivity extends AppCompatActivity {
         binding.viewPager.setAdapter(new FragmentsAdapter(getSupportFragmentManager()));
         binding.tabNavigation.setupWithViewPager(binding.viewPager);
 
-
-
-
-
     }
 
 }
