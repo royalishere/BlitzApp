@@ -2,10 +2,10 @@ package com.example.blitz.Models;
 
 public class Users {
 
-    String profilePic, userName, mail, password, userId, lastMessage, status;
+    String profilePicture, userName, mail, password, userId, lastMessage, status;
 
-    public Users(String profilePic, String userName, String mail, String password, String userId, String lastMessage, String status) {
-        this.profilePic = profilePic;
+    public Users(String profilePicture, String userName, String mail, String password, String userId, String lastMessage, String status) {
+        this.profilePicture = profilePicture;
         this.userName = userName;
         this.mail = mail;
         this.password = password;
@@ -30,11 +30,11 @@ public class Users {
         return status;
     }
     public String getProfilePic() {
-        return profilePic;
+        return profilePicture;
     }
 
-    public void setProfilePic(String profilePic) {
-        this.profilePic = profilePic;
+    public void setProfilePic(String profilePicture) {
+        this.profilePicture = profilePicture;
     }
 
     public String getUserName() {
