@@ -134,66 +134,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-//        ActivityResultLauncher<IntentSenderRequest> activityResultLauncher =
-//                registerForActivityResult(new ActivityResultContracts.StartIntentSenderForResult(), new ActivityResultCallback<ActivityResult>() {
-//                    @Override
-//                    public void onActivityResult(ActivityResult result) {
-//                        if (result.getResultCode() == RESULT_OK) {
-//                            try {
-//                                SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(result.getData());
-//                                String idToken = credential.getGoogleIdToken();
-//                                if (idToken !=  null) {
-//                                    String email = credential.getId();
-//                                    Toast.makeText(SignInActivity.this,"email: "+ email, Toast.LENGTH_SHORT).show();
-//                                }
-//                            } catch (ApiException e) {
-//                                Toast.makeText(SignInActivity.this, "Error: " + e.getStatusCode(), Toast.LENGTH_SHORT).show();
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }
-//                });
-//
-//        binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(SignInActivity.this, "Google Sign In", Toast.LENGTH_SHORT).show();
-//                oneTapClient.beginSignIn(signUpRequest)
-//                        .addOnSuccessListener(SignInActivity.this, new OnSuccessListener<BeginSignInResult>() {
-//                            @Override
-//                            public void onSuccess(BeginSignInResult result) {
-//                                IntentSenderRequest intentSenderRequest = new IntentSenderRequest.Builder(result.getPendingIntent().getIntentSender()).build();
-//                                activityResultLauncher.launch(intentSenderRequest);
-//
-////                                FirebaseUser user_current = auth.getCurrentUser();
-////
-////                                Users user = new Users();
-////                                user.setUserId(user_current.getUid());
-////                                user.setUserName(user_current.getDisplayName());
-////                                user.setProfilePic(user_current.getPhotoUrl().toString());
-////
-////                                database.getReference().child("Users").child(user_current.getUid()).setValue(user);
-//
-//                                // go to MainActivity
-//                                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-//                                startActivity(intent);
-//
-//
-//
-////                                Toast.makeText(SignInActivity.this, "Google Sign In Success with "+ user_current.getDisplayName().toString() , Toast.LENGTH_SHORT).show();
-//                            }
-//                        })
-//                        .addOnFailureListener(SignInActivity.this, new OnFailureListener() {
-//                            @Override
-//                            public void onFailure(@NonNull Exception e) {
-//                                // No Google Accounts found. Just continue presenting the signed-out UI.
-//                                Toast.makeText(SignInActivity.this, "Google Sign In Failed", Toast.LENGTH_SHORT).show();
-//                                Log.d("TAG", e.getLocalizedMessage());
-//                            }
-//                        });
-//            }
-//        });
-
+        // Sign In with Google
         binding.btnGoogle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -201,6 +142,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
+        // Check if user is already logged in
         if (auth.getCurrentUser() != null) {
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             startActivity(intent);

@@ -147,7 +147,7 @@
                     android:textStyle="bold" />
 
                 <EditText
-                    android:id="@+id/edPass"
+                    android:id="@+id/edCurrentPass"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -220,6 +220,7 @@
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatButton
+
                 android:id="@+id/btnChangePass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
