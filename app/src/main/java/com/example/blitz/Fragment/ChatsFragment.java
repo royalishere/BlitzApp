@@ -47,7 +47,13 @@ public class ChatsFragment extends Fragment {
                 list.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren())
                 {
+                    // get full attributes of Users class
                     Users users = dataSnapshot.getValue(Users.class);
+                    try {
+                        users.setProfilePic(dataSnapshot.child("profilePicture").getValue().toString());
+                    } catch (Exception e) {
+                        users.setProfilePic(null);
+                    }
                     users.getUserId(dataSnapshot.getKey());
                     list.add(users);
                 }

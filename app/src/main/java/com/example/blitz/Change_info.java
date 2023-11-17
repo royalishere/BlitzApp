@@ -8,11 +8,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Adapter;
 import android.widget.Toast;
 
+import com.example.blitz.Adapters.UsersAdapter;
 import com.example.blitz.Fragment.ProfileFragment;
 import com.example.blitz.Models.Users;
 import com.example.blitz.databinding.ActivityChangeInfoBinding;
+import com.example.blitz.databinding.FragmentChatsBinding;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Continuation;
@@ -42,6 +45,7 @@ import java.util.HashMap;
 public class Change_info extends AppCompatActivity {
 
     ActivityChangeInfoBinding binding;
+    FragmentChatsBinding chatsBinding;
     FirebaseStorage storage;
     FirebaseAuth auth;
     FirebaseDatabase database;
@@ -116,7 +120,6 @@ public class Change_info extends AppCompatActivity {
                         Picasso.get().load(users.getProfilePic())
                                 .placeholder(R.drawable.user_circle_svgrepo_com)
                                 .into(binding.profileAvt);
-
                         binding.edStatus.setText(users.getStatus());
                         binding.edUserName.setText(users.getUserName());
                     }
