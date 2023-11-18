@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="20dp"
+    android:layout_margin="7dp">
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/userImage"
+            android:layout_width="86dp"
+            android:layout_height="79dp"
+            android:padding="7dp"
+
+             />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+
+            android:layout_toEndOf="@+id/userImage"
+            android:text="Pham Dang"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/userEmail"
+            android:layout_width="222dp"
+            android:layout_height="38dp"
+            android:layout_below="@+id/userName"
+            android:layout_alignStart="@+id/userName"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="5dp"
+            android:text="phamdang@gmail.com"
+            android:textSize="20sp" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
