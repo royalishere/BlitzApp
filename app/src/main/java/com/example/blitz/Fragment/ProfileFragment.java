@@ -1,5 +1,8 @@
 package com.example.blitz.Fragment;
 
+import static com.google.android.material.color.utilities.MaterialDynamicColors.error;
+
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -68,6 +72,7 @@ public class ProfileFragment extends Fragment {
 
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInOptions gso;
+    TextView change_pass;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -118,6 +123,7 @@ public class ProfileFragment extends Fragment {
         tvUsername = (TextView) layout_profile.findViewById(R.id.tvUserName);
         tvEmail = (TextView) layout_profile.findViewById(R.id.tvEmail);
         avt = (ImageView) layout_profile.findViewById(R.id.avt);
+        change_pass = (TextView) layout_profile.findViewById(R.id.btn_changepass);
 
         //get the profile picture from storage
         StorageReference reference = storage.getReference().child("profile_pictures").child(FirebaseAuth.getInstance().getUid());
@@ -137,6 +143,9 @@ public class ProfileFragment extends Fragment {
         if (acct != null) {
             String personName = acct.getDisplayName();
             String personEmail = acct.getEmail();
+            //get the profile picture from google to display
+            Uri personPhoto = acct.getPhotoUrl();
+            Picasso.get().load(personPhoto).into(avt);
             Toast.makeText(getActivity(), personName + " " + personEmail, Toast.LENGTH_SHORT).show();
             tvUsername.setText(personName);
             tvEmail.setText(personEmail);
@@ -174,7 +183,12 @@ public class ProfileFragment extends Fragment {
                     auth.signOut();
                     Toast.makeText(getActivity(), "Logout", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), SignInActivity.class);
+
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
+
+
                 }
                //if user login with google
                 if (acct != null) {
@@ -184,6 +198,70 @@ public class ProfileFragment extends Fragment {
 
             }
         });
+
+        //click change password
+        change_pass.setOnClickListener(new View.OnClickListener() {
+            String password;
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_pass, null);
+
+                EditText edCurrentPass = dialogView.findViewById(R.id.edCurrentPass);
+                EditText edNewPass = dialogView.findViewById(R.id.edNewPass);
+                EditText edConfirmPass = dialogView.findViewById(R.id.edConfirmPass);
+
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                    // if login with google account, cannot change password
+                    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+                    if (acct != null) {
+                        Toast.makeText(getActivity(),
+                                "Account is logged in with a Google account, please change the Google account password", Toast.LENGTH_SHORT).show();
+                    }
+                    // if login with email and password
+                    else
+                    {
+                        if (check_input()) {
+                            dialog.dismiss();
+                        }
+                        database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    //get the username and status from database
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        Users users = snapshot.getValue(Users.class);
+                                        password = users.getPassword();
+                                        if (password.equals(edCurrentPass.getText().toString())){
+                                            auth.getCurrentUser().updatePassword(edNewPass.getText().toString());
+                                            String newPassword = edNewPass.getText().toString();
+                                            String confirmPassword = edConfirmPass.getText().toString();
+
+
+                                            if (newPassword.equals(confirmPassword)) {
+                                                database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("password")
+                                                        .setValue(newPassword);
+                                                Toast.makeText(getActivity(), "Password is changed", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(getActivity(), "Password does not match", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+
+                    }
+
+                }
+            }
+        );
+
+
 
         //click change profile
         btnChangeProfile = (Button) layout_profile.findViewById(R.id.btn_Profile);
@@ -206,9 +284,37 @@ public class ProfileFragment extends Fragment {
             public void onComplete(Task<Void> task) {
                 Toast.makeText(getActivity(), "Logout gg acct", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SignInActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
         });
+    }
+
+    private boolean check_input() {
+        View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_pass, null);
+        EditText edCurrentPass = dialogView.findViewById(R.id.edCurrentPass);
+        EditText edNewPass = dialogView.findViewById(R.id.edNewPass);
+        EditText edConfirmPass = dialogView.findViewById(R.id.edConfirmPass);
+
+        if (edCurrentPass.getText().toString().isEmpty()) {
+            edCurrentPass.setError("Please enter your current password");
+            return false;
+        }
+        if (edNewPass.getText().toString().isEmpty()) {
+            edNewPass.setError("Please enter your new password");
+            return false;
+        }
+        if (edConfirmPass.getText().toString().isEmpty()) {
+            edConfirmPass.setError("Please confirm your new password");
+            return false;
+        }
+
+
+
+
+
+        return true;
     }
 
 
