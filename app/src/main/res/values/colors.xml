@@ -20,4 +20,10 @@
     <color name="lightgreen">#e5ffcc</color>
     <color name="settingsIconColor">#0E8374</color>
     <color name="grayBackground">#BCBCBC</color>
+
+
+
+
+    <color name="my_primary">#00B2FF</color>
+    <color name="my_secondary">#673AB7</color>
 </resources>

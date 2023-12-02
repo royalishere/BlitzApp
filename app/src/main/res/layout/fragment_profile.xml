@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grayBackground"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:background="#F5F5F5">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -17,176 +14,221 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:background="@color/cardview_light_background">
+                android:layout_height="match_parent">
 
-                <ImageView
-                    android:id="@+id/imageView"
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"
-                    android:scaleType="fitXY"
+                    android:layout_height="wrap_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/top_background"
-                    />
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/avt"
-                    android:layout_width="140dp"
-                    android:layout_height="117dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/imageView"
-                    android:src="@drawable/hacker"
-                    app:civ_border_color="#FF000000"
-                    app:civ_border_width="1dp"/>
-
-                <TextView
-                    android:id="@+id/tvUserName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="User Name"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-
-                    app:layout_constraintEnd_toEndOf="@+id/avt"
-                    app:layout_constraintStart_toStartOf="@+id/avt"
-                    app:layout_constraintTop_toBottomOf="@+id/avt" />
-
-                <TextView
-                    android:id="@+id/tvEmail"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="example@gmail.com"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/tvUserName"
-                    app:layout_constraintStart_toStartOf="@+id/tvUserName"
-                    app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="472dp"
-                    android:orientation="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tvEmail">
-
-                    <!--<Button
-                        android:id="@+id/btn_acc_setting"
-                        android:textColor="@color/black"
-                        android:backgroundTint="#00CB82"
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginBottom="10dp"
-                        android:drawableLeft="@drawable/setting_two_svgrepo_com"
-                        android:drawablePadding="20dp"
-                        android:text="Account Settings"
-                        android:textAlignment="viewStart"
+                        android:layout_height="360dp"
+                        android:background="@drawable/top_background"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/avt"
+                        android:layout_width="140dp"
+                        android:layout_height="117dp"
+                        android:layout_marginTop="32dp"
+                        android:src="@drawable/hacker"
+                        app:civ_border_color="#FF000000"
+                        app:civ_border_width="1dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="User name"
+                        android:textColor="@color/white"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/avt"
+                        app:layout_constraintStart_toStartOf="@+id/avt"
+                        app:layout_constraintTop_toBottomOf="@+id/avt" />
+
+                    <TextView
+                        android:id="@+id/tvEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="example@gmail.com"
+                        android:textColor="@color/white"
                         android:textSize="18sp"
-                        android:textStyle="bold" />
-                    -->
-                    <Button
-                        android:id="@+id/btn_Profile"
+                        app:layout_constraintEnd_toEndOf="@+id/tvUserName"
+                        app:layout_constraintStart_toStartOf="@+id/tvUserName"
+                        app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:elevation="3dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/circles"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginBottom="10dp"
-                        android:backgroundTint="#00CB82"
-                        android:drawableLeft="@drawable/list_two_svgrepo_com"
-                        android:drawablePadding="20dp"
-                        android:text="Profile"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="60dp"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/white_background"
+                        android:orientation="vertical"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvEmail">
 
-                    <Button
-                        android:id="@+id/btn_contact"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginBottom="10dp"
-                        android:backgroundTint="#00CB82"
-                        android:drawableLeft="@drawable/contact_book_svgrepo_com"
-                        android:drawablePadding="20dp"
-                        android:text="Contact"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
 
-                    <Button
-                        android:id="@+id/btn_privacy"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="24dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal"
+                            tools:layout_marginEnd="20dp">
 
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginBottom="10dp"
-                        android:backgroundTint="#00CB82"
-                        android:drawableLeft="@drawable/sign_out_2_svgrepo_com"
-                        android:drawablePadding="20dp"
-                        android:text="Privacy Policy"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/textView9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Password"
+                                android:textColor="#182693"
+                                android:textSize="18dp" />
 
-                    <Button
-                        android:id="@+id/btn_about"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                            <TextView
+                                android:id="@+id/btn_changepass"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Change"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#5b5b5b"
+                                android:textSize="18dp" />
+                        </LinearLayout>
 
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginBottom="10dp"
-                        android:backgroundTint="#00CB82"
-                        android:drawableLeft="@drawable/sign_out_2_svgrepo_com"
-                        android:drawablePadding="20dp"
-                        android:text="About Us"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        <View
+                            android:id="@+id/view2"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="#d9d9d9"
+                            tools:layout_marginBottom="6dp" />
 
-                    <Button
-                        android:id="@+id/btn_logout"
-                        android:layout_width="match_parent"
-                        android:layout_height="60dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:orientation="horizontal">
 
-                        android:layout_marginStart="32dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginEnd="32dp"
-                        android:layout_marginBottom="10dp"
-                        android:backgroundTint="#00CB82"
-                        android:drawableLeft="@drawable/sign_out_2_svgrepo_com"
-                        android:drawablePadding="20dp"
-                        android:text="Log Out"
-                        android:textAlignment="viewStart"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                            <TextView
+                                android:id="@+id/textView11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Mobile"
+                                android:textColor="#182693"
+                                android:textSize="18dp" />
 
+                            <TextView
+                                android:id="@+id/tvMobile"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="1234-567-9801"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#5b5b5b"
+                                android:textSize="18dp" />
+                        </LinearLayout>
 
-                </LinearLayout>
-            </LinearLayout>
+                        <View
+                            android:id="@+id/view3"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_margin="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="#d9d9d9"
+                            tools:layout_marginBottom="6dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="20dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView13"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Address"
+                                android:textColor="#182693"
+                                android:textSize="18dp" />
+
+                            <TextView
+                                android:id="@+id/tvAddress"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="HCM City, Viet Nam"
+                                android:textAlignment="viewEnd"
+                                android:textColor="#5b5b5b"
+                                android:textSize="18dp" />
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btn_Profile"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="24dp"
+                            android:background="@drawable/background_button"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+
+                            android:text="Edit Profile" />
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                android:background="@drawable/background_button"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:drawableLeft="@drawable/baseline_logout_24"
+
+                android:text="Log Out" />
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

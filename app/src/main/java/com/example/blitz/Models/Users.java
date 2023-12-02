@@ -2,9 +2,9 @@ package com.example.blitz.Models;
 
 public class Users {
 
-    String profilePicture, userName, mail, password, userId, lastMessage, status;
+    String profilePicture, userName, mail, password, userId, lastMessage, status, address, mobile;
 
-    public Users(String profilePicture, String userName, String mail, String password, String userId, String lastMessage, String status) {
+    public Users(String profilePicture, String userName, String mail, String password, String userId, String lastMessage, String status, String address, String mobile) {
         this.profilePicture = profilePicture;
         this.userName = userName;
         this.mail = mail;
@@ -12,6 +12,8 @@ public class Users {
         this.userId = userId;
         this.lastMessage = lastMessage;
         this.status = status;
+        this.address = address;
+        this.mobile = mobile;
     }
 
     // Empty Constructor
@@ -75,5 +77,21 @@ public class Users {
 
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 }
