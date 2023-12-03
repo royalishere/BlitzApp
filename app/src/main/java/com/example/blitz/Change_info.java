@@ -176,6 +176,7 @@ public class Change_info extends AppCompatActivity {
                                             database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("password")
                                                     .setValue(newPassword);
                                             Toast.makeText(Change_info.this, "Password is changed", Toast.LENGTH_SHORT).show();
+
                                         } else {
                                             Toast.makeText(Change_info.this, "Password does not match", Toast.LENGTH_SHORT).show();
                                         }

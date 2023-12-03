@@ -115,6 +115,7 @@
                     android:alpha="0.7"/>
 
                 <TextView
+                    android:id="@+id/tvForgotPass"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Forgot password?"

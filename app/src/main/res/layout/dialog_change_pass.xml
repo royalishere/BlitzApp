@@ -135,7 +135,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnReset"
+            android:id="@+id/btnChange_CP_dialog"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -148,12 +148,12 @@
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="@id/dialogBox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnCancel"
+            app:layout_constraintStart_toEndOf="@id/btnCancel_CP_dialog"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
             app:layout_constraintVertical_bias="0.0" />
 
         <Button
-            android:id="@+id/btnCancel"
+            android:id="@+id/btnCancel_CP_dialog"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="40dp"
@@ -165,7 +165,7 @@
             android:textSize="14sp"
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintEnd_toStartOf="@id/btnReset"
+            app:layout_constraintEnd_toStartOf="@id/btnChange_CP_dialog"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
