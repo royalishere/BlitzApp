@@ -33,7 +33,20 @@
                         android:background="@drawable/top_background"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <ImageView
+                            android:id="@+id/imageView2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:elevation="3dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/circles"
+                            tools:layout_editor_absoluteX="0dp"
+                            tools:layout_editor_absoluteY="0dp" />
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
                     <de.hdodenhof.circleimageview.CircleImageView
@@ -47,6 +60,15 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/plus"
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:layout_marginTop="-30dp"
+                        app:layout_constraintEnd_toEndOf="@+id/avt"
+                        app:layout_constraintTop_toBottomOf="@+id/avt"
+                        app:srcCompat="@drawable/plus_svgrepo_com" />
 
                     <TextView
                         android:id="@+id/tvUserName"
@@ -72,16 +94,20 @@
                         app:layout_constraintStart_toStartOf="@+id/tvUserName"
                         app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
 
-                    <ImageView
-                        android:id="@+id/imageView2"
+                    <TextView
+                        android:id="@+id/tvStatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:elevation="3dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/circles"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:text="Status"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="10dp"
+                        tools:layout_editor_absoluteX="185dp"
+                        tools:layout_editor_absoluteY="260dp"
+                        app:layout_constraintEnd_toEndOf="@+id/tvEmail"
+                        app:layout_constraintStart_toStartOf="@+id/tvEmail"
+                        app:layout_constraintTop_toBottomOf="@+id/tvEmail"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -200,7 +226,7 @@
                         </LinearLayout>
 
                         <Button
-                            android:id="@+id/btn_Profile"
+                            android:id="@+id/btn_EditProfile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="24dp"

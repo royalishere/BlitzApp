@@ -40,25 +40,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/forgotTitle">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_avt"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/user_circle_svgrepo_com"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="2dp" />
-            />
 
-            <ImageView
-                android:id="@+id/plus"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginTop="-30dp"
-                app:srcCompat="@drawable/plus_svgrepo_com" />
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,7 +56,7 @@
                     android:layout_width="184dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="User Name : "
+                    android:text="Name : "
                     android:textColor="@color/my_primary"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -178,7 +162,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/btnCancel"
+            android:id="@+id/btnCancel_EP_dialog"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="40dp"
@@ -190,12 +174,12 @@
             android:textSize="14sp"
             app:cornerRadius="20dp"
             app:layout_constraintBottom_toBottomOf="@id/dialogBox"
-            app:layout_constraintEnd_toStartOf="@id/btn_save"
+            app:layout_constraintEnd_toStartOf="@id/btn_Save_EP_dialog"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linear1" />
 
         <Button
-            android:id="@+id/btn_save"
+            android:id="@+id/btn_Save_EP_dialog"
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_marginStart="10dp"
@@ -208,7 +192,7 @@
             android:background="@drawable/background_button"
             app:layout_constraintBottom_toBottomOf="@id/dialogBox"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/btnCancel"
+            app:layout_constraintStart_toEndOf="@id/btnCancel_EP_dialog"
             app:layout_constraintTop_toBottomOf="@+id/linear1" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
