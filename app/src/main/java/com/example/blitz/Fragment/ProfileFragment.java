@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -119,7 +120,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        LinearLayout layout_profile = (LinearLayout) inflater.inflate(R.layout.fragment_profile, null);
+        ConstraintLayout layout_profile = (ConstraintLayout) inflater.inflate(R.layout.fragment_profile, null);
         tvUsername = (TextView) layout_profile.findViewById(R.id.tvUserName);
         tvEmail = (TextView) layout_profile.findViewById(R.id.tvEmail);
         avt = (ImageView) layout_profile.findViewById(R.id.avt);
@@ -149,6 +150,10 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getActivity(), personName + " " + personEmail, Toast.LENGTH_SHORT).show();
             tvUsername.setText(personName);
             tvEmail.setText(personEmail);
+            //update avatar to database
+            database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("profilePicture")
+                    .setValue(personPhoto.toString());
+
 
         }
 
@@ -200,66 +205,66 @@ public class ProfileFragment extends Fragment {
         });
 
         //click change password
-        change_pass.setOnClickListener(new View.OnClickListener() {
-            String password;
-
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_pass, null);
-
-                EditText edCurrentPass = dialogView.findViewById(R.id.edCurrentPass);
-                EditText edNewPass = dialogView.findViewById(R.id.edNewPass);
-                EditText edConfirmPass = dialogView.findViewById(R.id.edConfirmPass);
-
-                builder.setView(dialogView);
-                AlertDialog dialog = builder.create();
-                    // if login with google account, cannot change password
-                    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-                    if (acct != null) {
-                        Toast.makeText(getActivity(),
-                                "Account is logged in with a Google account, please change the Google account password", Toast.LENGTH_SHORT).show();
-                    }
-                    // if login with email and password
-                    else
-                    {
-                        if (check_input()) {
-                            dialog.dismiss();
-                        }
-                        database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
-                                .addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    //get the username and status from database
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        Users users = snapshot.getValue(Users.class);
-                                        password = users.getPassword();
-                                        if (password.equals(edCurrentPass.getText().toString())){
-                                            auth.getCurrentUser().updatePassword(edNewPass.getText().toString());
-                                            String newPassword = edNewPass.getText().toString();
-                                            String confirmPassword = edConfirmPass.getText().toString();
-
-
-                                            if (newPassword.equals(confirmPassword)) {
-                                                database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("password")
-                                                        .setValue(newPassword);
-                                                Toast.makeText(getActivity(), "Password is changed", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                Toast.makeText(getActivity(), "Password does not match", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-
-                    }
-
-                }
-            }
-        );
+//        change_pass.setOnClickListener(new View.OnClickListener() {
+//            String password;
+//
+//            @Override
+//            public void onClick(View v) {
+//                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//                View dialogView = getLayoutInflater().inflate(R.layout.dialog_change_pass, null);
+//
+//                EditText edCurrentPass = dialogView.findViewById(R.id.edCurrentPass);
+//                EditText edNewPass = dialogView.findViewById(R.id.edNewPass);
+//                EditText edConfirmPass = dialogView.findViewById(R.id.edConfirmPass);
+//
+//                builder.setView(dialogView);
+//                AlertDialog dialog = builder.create();
+//                    // if login with google account, cannot change password
+//                    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+//                    if (acct != null) {
+//                        Toast.makeText(getActivity(),
+//                                "Account is logged in with a Google account, please change the Google account password", Toast.LENGTH_SHORT).show();
+//                    }
+//                    // if login with email and password
+//                    else
+//                    {
+//                        if (check_input()) {
+//                            dialog.dismiss();
+//                        }
+//                        database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())
+//                                .addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    //get the username and status from database
+//                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                        Users users = snapshot.getValue(Users.class);
+//                                        password = users.getPassword();
+//                                        if (password.equals(edCurrentPass.getText().toString())){
+//                                            auth.getCurrentUser().updatePassword(edNewPass.getText().toString());
+//                                            String newPassword = edNewPass.getText().toString();
+//                                            String confirmPassword = edConfirmPass.getText().toString();
+//
+//
+//                                            if (newPassword.equals(confirmPassword)) {
+//                                                database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("password")
+//                                                        .setValue(newPassword);
+//                                                Toast.makeText(getActivity(), "Password is changed", Toast.LENGTH_SHORT).show();
+//                                            } else {
+//                                                Toast.makeText(getActivity(), "Password does not match", Toast.LENGTH_SHORT).show();
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                                    }
+//                                });
+//
+//                    }
+//
+//                }
+//            }
+//        );
 
 
 
@@ -275,7 +280,7 @@ public class ProfileFragment extends Fragment {
 
 
 //
-        return layout_profile;
+       return layout_profile;
     }
 
     void signOut_google(){
