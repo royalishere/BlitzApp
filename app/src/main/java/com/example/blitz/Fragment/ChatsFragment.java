@@ -54,7 +54,7 @@ public class ChatsFragment extends Fragment {
                     } catch (Exception e) {
                         users.setProfilePic(null);
                     }
-                    users.getUserId(dataSnapshot.getKey());
+                    users.setUserId(dataSnapshot.getKey());
                     list.add(users);
                 }
                 adapter.notifyDataSetChanged();
