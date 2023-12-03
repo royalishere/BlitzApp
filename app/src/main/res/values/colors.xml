@@ -20,10 +20,14 @@
     <color name="lightgreen">#e5ffcc</color>
     <color name="settingsIconColor">#0E8374</color>
     <color name="grayBackground">#BCBCBC</color>
+    <color name ="darkGray">#6E6E6E</color>
+    <color name="grayBubble">#8F8F8F</color>
+    <color name="blueBubble">#30C0FF</color>
 
 
 
 
     <color name="my_primary">#00B2FF</color>
+    <color name="indicator">#0088C3</color>
     <color name="my_secondary">#673AB7</color>
 </resources>
