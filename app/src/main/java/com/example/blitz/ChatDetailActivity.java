@@ -1,11 +1,16 @@
 package com.example.blitz;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.blitz.Adapters.ChatAdapter;
@@ -40,6 +45,8 @@ public class ChatDetailActivity extends AppCompatActivity {
             String userName = getIntent().getStringExtra("userName");
             String profilePic = getIntent().getStringExtra("profilePic");
 
+            binding.sendBtn.setEnabled(false);
+            ImageViewCompat.setImageTintList(binding.sendBtn, ColorStateList.valueOf(getResources().getColor(R.color.grayBackground)));
             binding.usrname.setText(userName);
             Picasso.get().load(profilePic).placeholder(R.drawable.hacker).into(binding.profileImage);
 
@@ -75,6 +82,29 @@ public class ChatDetailActivity extends AppCompatActivity {
                                 public void onCancelled(@NonNull DatabaseError error) {
                                 }
                             });
+
+            binding.chatEditText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String messageTxt = binding.chatEditText.getText().toString();
+                    if (messageTxt.isEmpty()) {
+                        binding.sendBtn.setEnabled(false);
+                        ImageViewCompat.setImageTintList(binding.sendBtn, ColorStateList.valueOf(getResources().getColor(R.color.grayBackground)));
+                    } else {
+                        binding.sendBtn.setEnabled(true);
+                        ImageViewCompat.setImageTintList(binding.sendBtn, ColorStateList.valueOf(getResources().getColor(R.color.indicator)));
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+                }
+            });
+
             binding.sendBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
