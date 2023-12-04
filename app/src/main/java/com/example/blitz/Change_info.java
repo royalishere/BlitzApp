@@ -122,6 +122,7 @@ public class Change_info extends AppCompatActivity {
                                 .into(binding.profileAvt);
                         binding.edStatus.setText(users.getStatus());
                         binding.edUserName.setText(users.getUserName());
+
                     }
 
                     @Override

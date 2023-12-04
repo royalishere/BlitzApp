@@ -26,6 +26,12 @@ import android.widget.Toast;
 import com.example.blitz.Models.Users;
 import com.example.blitz.databinding.ActivityMainBinding;
 import com.example.blitz.databinding.ActivitySignInBinding;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
 import com.google.android.gms.auth.api.identity.Identity;
@@ -48,6 +54,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class SignInActivity extends AppCompatActivity {
 
     ActivitySignInBinding binding;
@@ -61,6 +70,8 @@ public class SignInActivity extends AppCompatActivity {
 //    private boolean showOneTapUI = true;
 
     GoogleSignInClient mGoogleSignInClient;
+
+    CallbackManager callbackManager;
 
 
 
@@ -76,6 +87,14 @@ public class SignInActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+
+        callbackManager = CallbackManager.Factory.create();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+
+
+
+
 
         // Progress Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
@@ -150,9 +169,48 @@ public class SignInActivity extends AppCompatActivity {
 
         // Check if user is already logged in
         if (auth.getCurrentUser() != null) {
-            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent intent1 = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(intent1);
         }
+
+        // Sign In with Facebook
+
+
+        binding.btnFb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+                LoginManager.getInstance().registerCallback(callbackManager,
+                        new FacebookCallback<LoginResult>() {
+                            @Override
+                            public void onSuccess(LoginResult loginResult) {
+                                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                                finish();
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+
+                            @Override
+                            public void onError(@NonNull FacebookException e) {
+
+                            }
+                        });
+                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile"));
+
+                // App code
+                Toast.makeText(SignInActivity.this, "Facebook Sign In Success", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+
+            }
+
+
+        });
 
         binding.tvForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -242,7 +300,14 @@ public class SignInActivity extends AppCompatActivity {
             }
 
         }
+        else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
+
+
 
     private void firebaseAuthWithGoogle(String idToken){
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
