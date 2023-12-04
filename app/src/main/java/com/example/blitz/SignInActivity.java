@@ -13,15 +13,25 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blitz.Models.Users;
 import com.example.blitz.databinding.ActivityMainBinding;
 import com.example.blitz.databinding.ActivitySignInBinding;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 import com.google.android.gms.auth.api.identity.BeginSignInResult;
 import com.google.android.gms.auth.api.identity.Identity;
@@ -44,6 +54,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class SignInActivity extends AppCompatActivity {
 
     ActivitySignInBinding binding;
@@ -58,6 +71,10 @@ public class SignInActivity extends AppCompatActivity {
 
     GoogleSignInClient mGoogleSignInClient;
 
+    CallbackManager callbackManager;
+
+
+
 
 
 
@@ -70,6 +87,14 @@ public class SignInActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
+
+        callbackManager = CallbackManager.Factory.create();
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+
+
+
+
+
 
         // Progress Dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
@@ -118,7 +143,7 @@ public class SignInActivity extends AppCompatActivity {
                                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                                     startActivity(intent);
                                 } else {
-                                    Toast.makeText(SignInActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SignInActivity.this, "Incorrect email or password. Please try again.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -144,9 +169,90 @@ public class SignInActivity extends AppCompatActivity {
 
         // Check if user is already logged in
         if (auth.getCurrentUser() != null) {
-            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent intent1 = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(intent1);
         }
+
+        // Sign In with Facebook
+
+
+        binding.btnFb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.show();
+                LoginManager.getInstance().registerCallback(callbackManager,
+                        new FacebookCallback<LoginResult>() {
+                            @Override
+                            public void onSuccess(LoginResult loginResult) {
+                                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                                finish();
+                            }
+
+                            @Override
+                            public void onCancel() {
+
+                            }
+
+                            @Override
+                            public void onError(@NonNull FacebookException e) {
+
+                            }
+                        });
+                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile"));
+
+                // App code
+                Toast.makeText(SignInActivity.this, "Facebook Sign In Success", Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                startActivity(intent);
+                dialog.dismiss();
+
+            }
+
+
+        });
+
+        binding.tvForgotPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SignInActivity.this);
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_forgot_pass, null);
+                EditText emailBox = dialogView.findViewById(R.id.emailBox);
+                builder.setView(dialogView);
+                AlertDialog dialog = builder.create();
+                dialogView.findViewById(R.id.btnReset).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String userEmail = emailBox.getText().toString();
+                        if (TextUtils.isEmpty(userEmail) && !Patterns.EMAIL_ADDRESS.matcher(userEmail).matches()){
+                            Toast.makeText(SignInActivity.this, "Enter your registered email id", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        auth.sendPasswordResetEmail(userEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    Toast.makeText(SignInActivity.this, "Check your email", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                } else {
+                                    Toast.makeText(SignInActivity.this, "Unable to send, failed", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                    }
+                });
+                dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+                if (dialog.getWindow() != null){
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
+                }
+                dialog.show();
+            }
+        });
 
 
 
@@ -194,7 +300,14 @@ public class SignInActivity extends AppCompatActivity {
             }
 
         }
+        else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+
     }
+
+
 
     private void firebaseAuthWithGoogle(String idToken){
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken,null);
