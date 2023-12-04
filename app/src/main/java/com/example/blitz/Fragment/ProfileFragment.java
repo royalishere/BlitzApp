@@ -516,7 +516,6 @@ public class ProfileFragment extends Fragment {
                         } else {
                             tvMobile.setText(mobile);
                         }
-                        tvUsername.setText(username);
 
 
 
