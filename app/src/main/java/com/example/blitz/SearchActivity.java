@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 
+import com.example.blitz.Adapters.PersonAdapter;
+
 import java.util.ArrayList;
 
 public class SearchActivity extends AppCompatActivity {

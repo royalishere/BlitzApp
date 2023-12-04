@@ -78,6 +78,8 @@ public class SignInActivity extends AppCompatActivity {
 
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -176,41 +178,41 @@ public class SignInActivity extends AppCompatActivity {
         // Sign In with Facebook
 
 
-        binding.btnFb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.show();
-                LoginManager.getInstance().registerCallback(callbackManager,
-                        new FacebookCallback<LoginResult>() {
-                            @Override
-                            public void onSuccess(LoginResult loginResult) {
-                                startActivity(new Intent(SignInActivity.this, MainActivity.class));
-                                finish();
-                            }
-
-                            @Override
-                            public void onCancel() {
-
-                            }
-
-                            @Override
-                            public void onError(@NonNull FacebookException e) {
-
-                            }
-                        });
-                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile"));
-
-                // App code
-                Toast.makeText(SignInActivity.this, "Facebook Sign In Success", Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                startActivity(intent);
-                dialog.dismiss();
-
-            }
-
-
-        });
+//        binding.btnFb.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                dialog.show();
+//                LoginManager.getInstance().registerCallback(callbackManager,
+//                        new FacebookCallback<LoginResult>() {
+//                            @Override
+//                            public void onSuccess(LoginResult loginResult) {
+//                                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+//                                finish();
+//                            }
+//
+//                            @Override
+//                            public void onCancel() {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(@NonNull FacebookException e) {
+//
+//                            }
+//                        });
+//                LoginManager.getInstance().logInWithReadPermissions(SignInActivity.this, Arrays.asList("public_profile"));
+//
+//                // App code
+//                Toast.makeText(SignInActivity.this, "Facebook Sign In Success", Toast.LENGTH_SHORT).show();
+//
+//                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+//                startActivity(intent);
+//                dialog.dismiss();
+//
+//            }
+//
+//
+//        });
 
         binding.tvForgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
