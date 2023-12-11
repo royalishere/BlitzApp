@@ -16,6 +16,8 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="Group chat"
+        android:textColor="#232323"
+        android:textSize="17dp"
         app:cornerRadius="16dp"
         app:icon="@drawable/group_chat"
         app:iconGravity="textStart"
