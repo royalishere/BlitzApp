@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.blitz.Adapters.UsersAdapter;
 import com.example.blitz.Models.Users;
@@ -28,23 +29,23 @@ public class ChatsFragment extends Fragment {
         // Required empty public constructor
     }
     FragmentChatsBinding binding;
-    ArrayList<Users> list = new ArrayList<>();
+    ArrayList<Users> chatlist = new ArrayList<>();
+    ArrayList<Users> grouplist = new ArrayList<>();
     FirebaseDatabase database;
+    Button chat_btn, group_btn;
+    UsersAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
-        UsersAdapter adapter = new UsersAdapter(getContext(), list);
-        binding.chatRecyclerView.setAdapter(adapter);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        binding.chatRecyclerView.setLayoutManager(layoutManager);
+        chat_btn = binding.chatBtn;
+        group_btn = binding.groupchatBtn;
         database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                list.clear();
+                chatlist.clear();
                 for(DataSnapshot dataSnapshot : snapshot.getChildren())
                 {
                     // get full attributes of Users class
@@ -55,7 +56,7 @@ public class ChatsFragment extends Fragment {
                         users.setProfilePic(null);
                     }
                     users.setUserId(dataSnapshot.getKey());
-                    list.add(users);
+                    chatlist.add(users);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -65,6 +66,38 @@ public class ChatsFragment extends Fragment {
 
             }
         });
+        chat_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // set tint color for chat_btn
+                chat_btn.setBackgroundTintList(getResources().getColorStateList(R.color.grayBubble));
+                group_btn.setBackgroundTintList(getResources().getColorStateList(R.color.grayBackground));
+                chat_btn.setTextColor(getResources().getColor(R.color.white));
+                group_btn.setTextColor(getResources().getColor(R.color.black));
+                adapter = new UsersAdapter(getContext(), chatlist);
+                binding.chatRecyclerView.setAdapter(adapter);
+
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                binding.chatRecyclerView.setLayoutManager(layoutManager);
+            }
+        });
+
+        group_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chat_btn.setBackgroundTintList(getResources().getColorStateList(R.color.grayBackground));
+                group_btn.setBackgroundTintList(getResources().getColorStateList(R.color.grayBubble));
+                chat_btn.setTextColor(getResources().getColor(R.color.black));
+                group_btn.setTextColor(getResources().getColor(R.color.white));
+                adapter = new UsersAdapter(getContext(), grouplist);
+                binding.chatRecyclerView.setAdapter(adapter);
+
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                binding.chatRecyclerView.setLayoutManager(layoutManager);
+            }
+        });
+
+        chat_btn.performClick();
         return binding.getRoot();
     }
 }

@@ -41,6 +41,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
+            android:label="Blitz Chat App"
             android:theme="@style/Theme.Blitz"/>
         <activity
             android:name=".ChatDetailActivity"
