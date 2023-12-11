@@ -12,16 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:gravity="right|center_horizontal"
+        android:gravity="right|center_vertical"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="Group chat"
-        android:textColor="#232323"
-        android:textSize="17dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         app:cornerRadius="16dp"
         app:icon="@drawable/group_chat"
         app:iconGravity="textStart"
-        app:iconPadding="5dp" />
+        app:iconPadding="5dp"
+        app:iconSize="16sp"
+        app:iconTint="@color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"

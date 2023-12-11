@@ -45,7 +45,7 @@
         <activity
             android:name=".ChatDetailActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.Blitz" />
     </application>
 
 </manifest>
