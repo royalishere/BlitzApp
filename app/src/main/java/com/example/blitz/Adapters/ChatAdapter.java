@@ -43,11 +43,11 @@ public class ChatAdapter extends RecyclerView.Adapter{
         Message message = messages.get(position);
         if(holder.getClass() == SenderViewHolder.class) {
             ((SenderViewHolder)holder).senderMsg.setText(message.getMessage());
-            String formattedDate = DateFormat.format("dd/MM/yy hh:mm", message.getTimestamp()).toString();
+            String formattedDate = DateFormat.format("dd.MM.yyyy  hh:mm", message.getTimestamp()).toString();
             ((SenderViewHolder)holder).senderTime.setText(formattedDate);
         } else {
             ((ReceiverViewHolder)holder).recieverMsg.setText(message.getMessage());
-            String formattedDate = DateFormat.format("dd/MM/yy hh:mm", message.getTimestamp()).toString();
+            String formattedDate = DateFormat.format("dd.MM.yyyy  hh:mm", message.getTimestamp()).toString();
             ((ReceiverViewHolder)holder).recieverTime.setText(formattedDate);
         }
     }

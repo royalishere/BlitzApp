@@ -7,6 +7,17 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:titleTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:titleTextColor="@color/white" />
+
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_navigation"
@@ -14,6 +25,7 @@
         android:layout_height="55dp"
         android:background="@color/my_primary"
         app:tabIndicatorColor="@color/indicator"
+        app:tabIndicatorFullWidth="true"
         app:tabTextColor="#FFFFFF" />
 
     <androidx.viewpager.widget.ViewPager
