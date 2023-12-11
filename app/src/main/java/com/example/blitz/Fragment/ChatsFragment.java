@@ -1,5 +1,6 @@
 package com.example.blitz.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -65,6 +66,7 @@ public class ChatsFragment extends Fragment {
 
             }
         });
+
         return binding.getRoot();
     }
 }

@@ -8,7 +8,7 @@
     tools:context=".Fragment.ChatsFragment">
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/groupChat_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"

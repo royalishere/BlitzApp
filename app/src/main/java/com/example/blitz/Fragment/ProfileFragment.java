@@ -29,6 +29,10 @@ import com.example.blitz.Change_info;
 import com.example.blitz.Models.Users;
 import com.example.blitz.R;
 import com.example.blitz.SignInActivity;
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -48,6 +52,9 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 
@@ -136,6 +143,38 @@ public class ProfileFragment extends Fragment {
         plus = (ImageView) layout_profile.findViewById(R.id.plus);
         change_pass = (TextView) layout_profile.findViewById(R.id.btn_changepass);
         edit_profile = (Button) layout_profile.findViewById(R.id.btn_EditProfile);
+
+        // facebook graph api
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        // if user login with facebook
+        // get the username and profile picture from facebook to display
+        if (accessToken != null && !accessToken.isExpired()) {
+            GraphRequest request = GraphRequest.newMeRequest(
+                    accessToken,
+                    new GraphRequest.GraphJSONObjectCallback() {
+                        @Override
+                        public void onCompleted(
+                                JSONObject object,
+                                GraphResponse response) {
+
+                            try {
+                                String fullName = object.getString("name");
+                                tvUsername.setText(fullName);
+
+                                String url = object.getJSONObject("picture").getJSONObject("data").getString("url");
+                                Picasso.get().load(url).into(avt);
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+
+                            // Application code
+                        }
+                    });
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,link,picture.type(large)");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
 
         //get the profile picture from storage
         StorageReference reference = storage.getReference().child("profile_pictures").child(FirebaseAuth.getInstance().getUid());
@@ -261,6 +300,10 @@ public class ProfileFragment extends Fragment {
                 if (acct != null) {
                     signOut_google();
                 }
+                //if user login with facebook
+                if (accessToken != null && !accessToken.isExpired()) {
+                    signOut_fb();
+                }
 
 
             }
@@ -278,6 +321,15 @@ public class ProfileFragment extends Fragment {
                 if (acct != null) {
                     change_pass.setText("Cannot change password");
                     Toast.makeText(getActivity(), "Account is logged in with a Google account, please change the Google account password", Toast.LENGTH_SHORT).show();
+                }
+                else if (accessToken != null && !accessToken.isExpired()){
+                    //if user login with facebook account
+                    //cannot change password
+                    //show notification to user
+
+                        change_pass.setText("Cannot change password");
+                        Toast.makeText(getActivity(), "Account is logged in with a Facebook account, please change the Facebook account password", Toast.LENGTH_SHORT).show();
+
                 }
                 else {
                     //if user login with email and password
@@ -450,7 +502,7 @@ public class ProfileFragment extends Fragment {
                         }
                         //set text in profile fragment
                         if (status.isEmpty()) {
-                            tvStatus.setText("Empty");
+                            tvStatus.setText("Status: Empty");
                         } else {
                             tvStatus.setText(status);
                         }
@@ -521,7 +573,7 @@ public class ProfileFragment extends Fragment {
     }
 
 
-
+    // sign out gg acct
     void signOut_google(){
         mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -533,6 +585,16 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    // sign out fb acct
+    void signOut_fb(){
+        LoginManager.getInstance().logOut();
+        Toast.makeText(getActivity(), "Log Out", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(getActivity(), SignInActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 
     @Override
