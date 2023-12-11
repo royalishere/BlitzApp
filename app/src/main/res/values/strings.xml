@@ -1,4 +1,7 @@
 <resources>
+    <string name="facebook_app_id">674756691447064</string>
+    <string name="fb_login_protocol_scheme">fb674756691447064</string>
+    <string name="facebook_client_token">8ef8afb4438ab99f40722402183b6ebd</string>
     <string name="app_name">Blitz</string>
     <string name="title_activity_search">SearchActivity</string>
     <string name="web_client_id">1093518124011-tdgl3qldv9e02kmgcsu0v3hjtcavm4vo.apps.googleusercontent.com</string>

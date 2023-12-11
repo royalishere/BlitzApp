@@ -8,11 +8,11 @@
     tools:context=".Fragment.ChatsFragment">
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/groupChat_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?android:attr/selectableItemBackground"
-        android:gravity="right|center_horizontal"
+        android:gravity="right"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:text="Group chat"
@@ -20,8 +20,9 @@
         android:textSize="17dp"
         app:cornerRadius="16dp"
         app:icon="@drawable/group_chat"
-        app:iconGravity="textStart"
-        app:iconPadding="5dp" />
+        app:iconGravity="textEnd"
+        app:iconPadding="8dp"
+        app:iconSize="18dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerView"
