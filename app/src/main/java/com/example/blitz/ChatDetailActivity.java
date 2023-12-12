@@ -43,7 +43,7 @@ public class ChatDetailActivity extends AppCompatActivity {
             final String senderId = auth.getUid();
             String receiverId = getIntent().getStringExtra("userId");
             String userName = getIntent().getStringExtra("userName");
-            String profilePic = getIntent().getStringExtra("profilePic");
+            String profilePic = getIntent().getStringExtra("profilePicture");
 
             binding.sendBtn.setEnabled(false);
             ImageViewCompat.setImageTintList(binding.sendBtn, ColorStateList.valueOf(getResources().getColor(R.color.grayBackground)));

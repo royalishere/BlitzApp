@@ -43,7 +43,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@androidx.annotation.NonNull ViewHolder holder, int position) {
         Users users = list.get(position);
-        Picasso.get().load(users.getProfilePic()).placeholder(R.drawable.hacker).into(holder.image);
+        Picasso.get().load(users.getProfilePicture()).placeholder(R.drawable.hacker).into(holder.image);
         holder.userName.setText(users.getUserName());
 
         // get last message
@@ -54,11 +54,16 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
             public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChildren()) {
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        String last_msg = dataSnapshot.child("message").getValue().toString();
+                        if(last_msg.length() > 20)
+                        {
+                            last_msg = last_msg.substring(0, 20) + "...";
+                        }
                         holder.lastMessage.setText(dataSnapshot.child("message").getValue().toString());
                     }
                 }
                 else {
-                    holder.lastMessage.setText("Tap to chat");
+                    holder.lastMessage.setText("You are now connected. Say Hi!");
                 }
             }
             @Override
@@ -71,7 +76,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 // send data to ChatDetailActivity
                 Intent intent = new Intent(context, ChatDetailActivity.class);
                 intent.putExtra("userId", users.getUserId());
-                intent.putExtra("profilePic", users.getProfilePic());
+                intent.putExtra("profilePicture", users.getProfilePicture());
                 intent.putExtra("userName", users.getUserName());
                 context.startActivity(intent);
             }

@@ -1,7 +1,9 @@
 package com.example.blitz.Fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -34,38 +36,16 @@ public class ChatsFragment extends Fragment {
     FirebaseDatabase database;
     Button chat_btn, group_btn;
     UsersAdapter adapter;
+    boolean fetching = false;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
         chat_btn = binding.chatBtn;
         group_btn = binding.groupchatBtn;
-        database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                chatlist.clear();
-                for(DataSnapshot dataSnapshot : snapshot.getChildren())
-                {
-                    // get full attributes of Users class
-                    Users users = dataSnapshot.getValue(Users.class);
-                    try {
-                        users.setProfilePic(dataSnapshot.child("profilePicture").getValue().toString());
-                    } catch (Exception e) {
-                        users.setProfilePic(null);
-                    }
-                    users.setUserId(dataSnapshot.getKey());
-                    chatlist.add(users);
-                }
-                adapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        // main chat sections handling
         chat_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,6 +62,7 @@ public class ChatsFragment extends Fragment {
             }
         });
 
+        // group chat sections handling
         group_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +78,36 @@ public class ChatsFragment extends Fragment {
             }
         });
 
+        // fetch users from firebase
+        new FetchUsersFromFirebase().execute();
         chat_btn.performClick();
         return binding.getRoot();
+    }
+
+    // do in background
+    private class FetchUsersFromFirebase extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    chatlist.clear();
+                    for(DataSnapshot dataSnapshot : snapshot.getChildren())
+                    {
+                        // get full attributes of Users class
+                        Users users = dataSnapshot.getValue(Users.class);
+                        users.setUserId(dataSnapshot.getKey());
+                        chatlist.add(users);
+                    }
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
+                }
+            });
+            return null;
+        }
     }
 }

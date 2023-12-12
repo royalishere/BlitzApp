@@ -149,7 +149,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         // Check if user is already logged in
-        if (auth.getCurrentUser() != null) {
+        if (auth.getCurrentUser() != null){
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             startActivity(intent);
         }
@@ -256,7 +256,7 @@ public class SignInActivity extends AppCompatActivity {
                     Users users = new Users();
                     users.setUserId(user.getUid());
                     users.setUserName(user.getDisplayName());
-                    users.setProfilePic(user.getPhotoUrl().toString());
+                    users.setProfilePicture(user.getPhotoUrl().toString());
                     database.getReference().child("Users").child(user.getUid()).setValue(users);
 
 

@@ -117,7 +117,7 @@ public class Change_info extends AppCompatActivity {
                     //get the username and status from database
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Users users = snapshot.getValue(Users.class);
-                        Picasso.get().load(users.getProfilePic())
+                        Picasso.get().load(users.getProfilePicture())
                                 .placeholder(R.drawable.user_circle_svgrepo_com)
                                 .into(binding.profileAvt);
                         binding.edStatus.setText(users.getStatus());

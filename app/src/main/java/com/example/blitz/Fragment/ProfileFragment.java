@@ -208,7 +208,6 @@ public class ProfileFragment extends Fragment {
             //get the profile picture from google to display
             Uri personPhoto = acct.getPhotoUrl();
             Picasso.get().load(personPhoto).into(avt);
-            Toast.makeText(getActivity(), personName + " " + personEmail, Toast.LENGTH_SHORT).show();
             tvUsername.setText(personName);
             tvEmail.setText(personEmail);
             //update avatar to database
@@ -526,7 +525,6 @@ public class ProfileFragment extends Fragment {
         mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(Task<Void> task) {
-                Toast.makeText(getActivity(), "Logout gg acct", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SignInActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
