@@ -47,6 +47,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SignInActivity extends AppCompatActivity {
 
@@ -123,6 +124,14 @@ public class SignInActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                                     startActivity(intent);
+
+                                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
+                                        @Override
+                                        public void onSuccess(String s) {
+                                            database.getReference().child("Users").child(task.getResult().getUser().getUid()).child("token").setValue(s);
+                                        }
+                                    });
+
                                 } else {
                                     Toast.makeText(SignInActivity.this, "Incorrect email or password. Please try again.", Toast.LENGTH_SHORT).show();
                                 }
@@ -259,6 +268,12 @@ public class SignInActivity extends AppCompatActivity {
                     users.setProfilePic(user.getPhotoUrl().toString());
                     database.getReference().child("Users").child(user.getUid()).setValue(users);
 
+                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
+                        @Override
+                        public void onSuccess(String s) {
+                            database.getReference().child("Users").child(user.getUid()).child("token").setValue(s);
+                        }
+                    });
 
 
                     //updateUI(user);
