@@ -48,6 +48,11 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
+    implementation("com.google.firebase:firebase-messaging")
+    implementation("com.google.firebase:firebase-analytics")
+
+    implementation ("com.android.volley:volley:1.2.1")
+
 
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
@@ -55,6 +60,8 @@ dependencies {
     // For control over item selection of both touch and mouse driven selection
     implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
+
+
 
 
     testImplementation("junit:junit:4.13.2")

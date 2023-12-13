@@ -18,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
@@ -66,6 +67,15 @@ public class SignUpActivity extends AppCompatActivity {
                                     // Get the current user id
                                     String id = task.getResult().getUser().getUid();
                                     database.getReference().child("Users").child(id).setValue(user);
+
+                                    FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<String> task) {
+                                            String token = task.getResult();
+                                            database.getReference().child("Users").child(id).child("token").setValue(token);
+                                        }
+                                    });
+
                                     // sign in with the new user and go to main activity
                                     Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
                                     startActivity(intent);
