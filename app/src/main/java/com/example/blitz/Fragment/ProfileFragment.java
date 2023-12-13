@@ -247,9 +247,16 @@ public class ProfileFragment extends Fragment {
 
                 //if user login with email and password
                 if(auth.getCurrentUser() != null){
+                    //delete token
+                    database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("token")
+                            .setValue("");
+
+
                     auth.signOut();
                     Toast.makeText(getActivity(), "Logout", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), SignInActivity.class);
+
+
 
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -526,6 +533,11 @@ public class ProfileFragment extends Fragment {
         mGoogleSignInClient.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(Task<Void> task) {
+                //delete token
+                database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("token")
+                        .setValue("");
+
+
                 Toast.makeText(getActivity(), "Logout gg acct", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SignInActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
