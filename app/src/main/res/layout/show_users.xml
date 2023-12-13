@@ -40,7 +40,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="12dp"
             android:paddingTop="5dp"
-            android:text="last message"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>
