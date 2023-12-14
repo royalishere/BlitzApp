@@ -13,7 +13,29 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
 
+
     </style>
 
     <style name="Theme.Blitz" parent="Base.Theme.Blitz" />
+
+
+    <!-- Light theme. -->
+    <style name="colorText1">
+        <item name="android:textColor">#182693</item>
+    </style>
+
+    <style name="colorText2">
+        <item name="android:textColor">#00B2FF</item>
+    </style>
+
+    <style name="colorHint1">
+        <item name="android:textColor">#444444	</item>
+    </style>
+
+    <style name="colorBackground1">
+        <item name="android:background">#f5f5f5</item>
+    </style>
+
+
+
 </resources>

@@ -7,6 +7,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +26,8 @@ public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
     private FirebaseAuth auth;
     FirebaseDatabase database;
+
+    boolean isShowPass = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +48,24 @@ public class SignUpActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
 
 
-        // Sign Up Button
 
+
+        // Show/Hide Password
+        binding.hideShowPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isShowPass)
+                {
+                    binding.edPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    isShowPass = false;
+                }
+                else
+                {
+                    binding.edPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    isShowPass = true;
+                }
+            }
+        });
         binding.btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
