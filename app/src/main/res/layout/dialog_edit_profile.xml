@@ -57,7 +57,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Name : "
-                    android:textColor="@color/my_primary"
+                    style="@style/colorText2"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -68,6 +68,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Enter your name"
+                    style="@style/colorHint1"
+
                     android:inputType="text"
 
                     android:textSize="12sp" />
@@ -85,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="About :  "
-                    android:textColor="@color/my_primary"
+                    style="@style/colorText2"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -96,6 +98,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="About "
+                    style="@style/colorHint1"
+
                     android:inputType="text"
 
                     android:textSize="12sp" />
@@ -113,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Mobile  "
-                    android:textColor="@color/my_primary"
+                    style="@style/colorText2"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -124,6 +128,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Enter your mobile number"
+                    style="@style/colorHint1"
+
                     android:inputType="phone"
 
                     android:textSize="12sp" />
@@ -141,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Address:  "
-                    android:textColor="@color/my_primary"
+                    style="@style/colorText2"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -152,6 +158,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Enter your address "
+                    style="@style/colorHint1"
+
                     android:inputType="text"
 
                     android:textSize="12sp" />

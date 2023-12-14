@@ -5,13 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragment.ChatsFragment">
+    tools:context=".Fragment.ChatsFragment"
+    android:id="@+id/LL"
+    style="@style/colorBackground1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <Button
             android:id="@+id/chat_btn"
@@ -20,7 +24,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/grayBackground"
+            android:background="@drawable/background_button"
             android:insetTop="4dp"
             android:minHeight="35dip"
             android:paddingTop="0dp"
@@ -35,16 +39,19 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/grayBackground"
+            android:background="@drawable/background_button"
+
             android:minHeight="35dip"
             android:paddingTop="0dp"
             android:paddingBottom="0dp"
             android:text="Groups"
+
             app:cornerRadius="12dp" />
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginLeft="10dp"
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

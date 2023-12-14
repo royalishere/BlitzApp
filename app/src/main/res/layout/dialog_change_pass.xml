@@ -10,6 +10,7 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dialogBox"
@@ -37,7 +38,6 @@
             android:layout_marginStart="4dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
-            android:background="@drawable/linear_bg"
             android:orientation="vertical"
             android:padding="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,8 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Password : "
-                    android:textColor="#006AFF"
-
+                    style="@style/colorText2"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -68,6 +67,7 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Enter your password"
+                    style="@style/colorHint1"
                     android:inputType="textPassword"
 
                     android:textSize="10sp" />
@@ -85,8 +85,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="New password : "
-                    android:textColor="#006AFF"
-
+                    style="@style/colorText2"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -97,6 +96,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Enter new password"
+                    style="@style/colorHint1"
+
                     android:inputType="textPassword"
 
                     android:textSize="10sp" />
@@ -114,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Confirm password :  "
-                    android:textColor="#006AFF"
+                    style="@style/colorText2"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -125,6 +126,8 @@
                     android:layout_weight="1"
                     android:ems="10"
                     android:hint="Confirm password"
+                    style="@style/colorHint1"
+
                     android:inputType="textPassword"
 
 

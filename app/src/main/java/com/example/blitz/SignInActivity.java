@@ -16,6 +16,8 @@ import android.content.IntentSender;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -56,12 +58,11 @@ public class SignInActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
 
-//    private SignInClient oneTapClient;
-//    private BeginSignInRequest signUpRequest;
-//    private static final int REQ_ONE_TAP = 9;  // Can be any integer unique to the Activity.
-//    private boolean showOneTapUI = true;
+
 
     GoogleSignInClient mGoogleSignInClient;
+    boolean isShowPass = false;
+
 
 
 
@@ -84,17 +85,7 @@ public class SignInActivity extends AppCompatActivity {
         builder.setView(R.layout.process);
         AlertDialog dialog = builder.create();
 
-        // One Tap Sign In
-//        oneTapClient = Identity.getSignInClient(this);
-//        signUpRequest = BeginSignInRequest.builder()
-//                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
-//                        .setSupported(true)
-//                        // Your server's client ID, not your Android client ID.
-//                        .setServerClientId(getString(R.string.web_client_id))
-//                        // Show all accounts on the device.
-//                        .setFilterByAuthorizedAccounts(false)
-//                        .build())
-//                .build();
+
 
 
         //Continue with Google Sign In
@@ -104,6 +95,23 @@ public class SignInActivity extends AppCompatActivity {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // Show/Hide Password
+        binding.hideShowPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(isShowPass)
+                {
+                    binding.edPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    isShowPass = false;
+                }
+                else
+                {
+                    binding.edPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    isShowPass = true;
+                }
+            }
+        });
 
 
         binding.btnSignIn.setOnClickListener(new View.OnClickListener() {
@@ -266,6 +274,7 @@ public class SignInActivity extends AppCompatActivity {
                     users.setUserId(user.getUid());
                     users.setUserName(user.getDisplayName());
                     users.setProfilePic(user.getPhotoUrl().toString());
+                    users.setMail(user.getEmail());
                     database.getReference().child("Users").child(user.getUid()).setValue(users);
 
                     FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
