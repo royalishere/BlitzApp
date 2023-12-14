@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -71,7 +72,7 @@ public class ProfileFragment extends Fragment {
     FirebaseDatabase database;
     FirebaseStorage storage;
 
-    Button btnLogout, edit_profile;
+    Button btnLogout, edit_profile,btn_NightMode;
 
     ImageView avt, plus;
 
@@ -80,6 +81,7 @@ public class ProfileFragment extends Fragment {
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInOptions gso;
     TextView change_pass;
+    boolean isNightMode;
     public ProfileFragment() {
         // Required empty public constructor
     }
@@ -136,6 +138,35 @@ public class ProfileFragment extends Fragment {
         plus = (ImageView) layout_profile.findViewById(R.id.plus);
         change_pass = (TextView) layout_profile.findViewById(R.id.btn_changepass);
         edit_profile = (Button) layout_profile.findViewById(R.id.btn_EditProfile);
+
+
+
+        //-------------------
+        //night mode
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+            LinearLayout LL1 = (LinearLayout) layout_profile.findViewById(R.id.LL1);
+            LL1.setBackground(getResources().getDrawable(R.drawable.dark_background));
+
+            ConstraintLayout CL_topbackground = (ConstraintLayout) layout_profile.findViewById(R.id.CL_topbackground);
+            CL_topbackground.setBackground(getResources().getDrawable(R.drawable.dark_background));
+
+        }
+        else if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+            LinearLayout LL1 = (LinearLayout) layout_profile.findViewById(R.id.LL1);
+            LL1.setBackground(getResources().getDrawable(R.drawable.white_background));
+
+            ConstraintLayout CL_topbackground = (ConstraintLayout) layout_profile.findViewById(R.id.CL_topbackground);
+            CL_topbackground.setBackground(getResources().getDrawable(R.drawable.top_background));
+        }
+        else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+
+
+
+
+        //-------------------
+
 
         //get the profile picture from storage
         StorageReference reference = storage.getReference().child("profile_pictures").child(FirebaseAuth.getInstance().getUid());
@@ -296,7 +327,25 @@ public class ProfileFragment extends Fragment {
                     EditText edNewPass = dialogView.findViewById(R.id.edNewPass);
                     EditText edConfirmPass = dialogView.findViewById(R.id.edConfirmPass);
 
-                    builder.setView(dialogView);
+                    //-----------------------
+                    //night mode
+                    if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                        ConstraintLayout CL_dialog = (ConstraintLayout) dialogView.findViewById(R.id.dialogBox);
+                        CL_dialog.setBackground(getResources().getDrawable(R.drawable.dark_box));
+                    }
+                    else if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                        ConstraintLayout CL_dialog = (ConstraintLayout) dialogView.findViewById(R.id.dialogBox);
+                        CL_dialog.setBackground(getResources().getDrawable(R.drawable.white_box));
+                    }
+                    else {
+                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    }
+                    //-----------------------
+
+
+
+
+                        builder.setView(dialogView);
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     dialogView.findViewById(R.id.btnChange_CP_dialog).setOnClickListener(new View.OnClickListener() {
@@ -391,6 +440,22 @@ public class ProfileFragment extends Fragment {
                 EditText edStatus = dialogView.findViewById(R.id.edStatus);
                 EditText edAddress = dialogView.findViewById(R.id.edAddress);
                 EditText edMobile = dialogView.findViewById(R.id.edMobile);
+
+                //-----------------------
+                //night mode
+                if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES) {
+                    ConstraintLayout CL_dialog = (ConstraintLayout) dialogView.findViewById(R.id.dialogBox);
+                    CL_dialog.setBackground(getResources().getDrawable(R.drawable.dark_box));
+
+                }
+                else if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                    ConstraintLayout CL_dialog = (ConstraintLayout) dialogView.findViewById(R.id.dialogBox);
+                    CL_dialog.setBackground(getResources().getDrawable(R.drawable.white_box));
+                }
+                else {
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                }
+                //-----------------------
 
                 //get the username, status, address, mobile from database
                 database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())

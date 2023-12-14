@@ -9,4 +9,10 @@
         android:id="@+id/logout"
         android:title="Log Out"
         />
+    <item
+        android:id="@+id/nightMode"
+        android:title="Night Mode"
+        android:checkable="true"
+         />
+
 </menu>

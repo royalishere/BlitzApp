@@ -32,6 +32,7 @@
             android:paddingTop="10dp"
             android:text="TextView"
             android:textSize="16dp"
+            style="@style/colorHint1"
             android:textStyle="bold" />
 
         <TextView

@@ -3,7 +3,8 @@ package com.example.blitz.Fragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
+
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -42,6 +43,11 @@ public class ChatsFragment extends Fragment {
         // Inflate the layout for this fragment
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
+
+        // if dark mode is enabled, set background color to black
+
+
+
         chat_btn = binding.chatBtn;
         group_btn = binding.groupchatBtn;
 
