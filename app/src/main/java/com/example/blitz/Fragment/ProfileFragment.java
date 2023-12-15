@@ -275,8 +275,12 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                //if user login with google
+                if (acct != null) {
+                    signOut_google();
+                }
                 //if user login with email and password
-                if(auth.getCurrentUser() != null){
+                else {
                     //delete token
                     database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("token")
                             .setValue("");
@@ -294,10 +298,7 @@ public class ProfileFragment extends Fragment {
 
 
                 }
-               //if user login with google
-                if (acct != null) {
-                    signOut_google();
-                }
+
 
 
             }

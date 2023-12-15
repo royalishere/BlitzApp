@@ -57,7 +57,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                         String last_msg = dataSnapshot.child("message").getValue().toString();
                         if(last_msg.length() > 20)
                         {
-                            last_msg = last_msg.substring(0, 20) + "...";
+                            last_msg = last_msg.substring(0,20) + "...";
                         }
                         holder.lastMessage.setText(dataSnapshot.child("message").getValue().toString());
                     }

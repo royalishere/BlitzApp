@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="12dp"
             android:paddingTop="5dp"
+            style="@style/colorHint1"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

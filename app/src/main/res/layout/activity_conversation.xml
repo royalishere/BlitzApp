@@ -97,7 +97,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            android:background="@drawable/rounded_edittext"
+            style="@style/rounded_editext1"
             android:ems="10"
             android:hint="Type your message..."
             android:inputType="text|textLongMessage|textMultiLine"
