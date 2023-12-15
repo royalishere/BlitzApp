@@ -13,6 +13,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.scottyab.aescrypt.AESCrypt;
 
 public class PushNotificationService extends FirebaseMessagingService {
     @SuppressLint("NewApi")
@@ -21,6 +22,13 @@ public class PushNotificationService extends FirebaseMessagingService {
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         String title = remoteMessage.getNotification().getTitle();
         String text = remoteMessage.getNotification().getBody();
+
+        try {
+            text = AESCrypt.decrypt(getString(R.string.key_encrypt),text);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         String channel_id = "MESSAGE";
 
         NotificationChannel channel = new NotificationChannel(
