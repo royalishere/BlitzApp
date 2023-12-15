@@ -18,19 +18,43 @@ public class Message {
     public Message() {
     }
 
+//    public String getuId() {
+//        return uId;
+//    }
+//
+//    public String getMessage() {
+//        return message;
+//    }
+//
+//    public void setTimestamp(long time) {
+//        this.timestamp = time;
+//    }
+//
+//    public long getTimestamp() {
+//        return timestamp;
+//    }
+
     public String getuId() {
         return uId;
+    }
+
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setTimestamp(long time) {
-        this.timestamp = time;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public long getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }
