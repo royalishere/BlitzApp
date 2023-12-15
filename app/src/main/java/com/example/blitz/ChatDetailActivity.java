@@ -197,10 +197,27 @@ public class ChatDetailActivity extends AppCompatActivity {
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
                                                     public void onSuccess(Void unused) {
+                                                        //make body of notification
+                                                        String body;
+                                                        try{
+                                                            body = AESCrypt.decrypt(getString(R.string.key_encrypt),message.getMessage());
+                                                        }
+                                                        catch (Exception e)
+                                                        {
+                                                            throw new RuntimeException(e);
+                                                        }
+                                                        body = user_sender.getUserName()+": "+body;
+                                                        try{
+                                                            body = AESCrypt.encrypt(getString(R.string.key_encrypt),body);
+                                                        }
+                                                        catch (Exception e)
+                                                        {
+                                                            throw new RuntimeException(e);
+                                                        }
                                                         FCMSend.pushNotification(ChatDetailActivity.this,
                                                                 user_receiver.getToken(),
                                                                 "You have a new message",
-                                                                user_sender.getUserName()+": "+message.getMessage());
+                                                                body);
 
 
                                                     }

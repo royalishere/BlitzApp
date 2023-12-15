@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.scottyab.aescrypt.AESCrypt;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -55,11 +56,20 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 if(snapshot.hasChildren()) {
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         String last_msg = dataSnapshot.child("message").getValue().toString();
+                        //decrypt last message
+                        try
+                        {
+                            last_msg = AESCrypt.decrypt(context.getString(R.string.key_encrypt),last_msg);
+                        }
+                        catch (Exception e)
+                        {
+                            throw new RuntimeException(e);
+                        }
                         if(last_msg.length() > 20)
                         {
                             last_msg = last_msg.substring(0,20) + "...";
                         }
-                        holder.lastMessage.setText(dataSnapshot.child("message").getValue().toString());
+                        holder.lastMessage.setText(last_msg);
                     }
                 }
                 else {

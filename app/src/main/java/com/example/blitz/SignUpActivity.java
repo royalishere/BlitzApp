@@ -22,6 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
     private FirebaseAuth auth;
@@ -74,6 +77,11 @@ public class SignUpActivity extends AppCompatActivity {
                     return;
                 }
                 dialog.show();
+                // encrypt password to store in database
+                String passwordEncrypted = md5(binding.edPassword.getText().toString());
+
+
+                // Create user with email and password (password encrypted by firebase )
                 auth.createUserWithEmailAndPassword
                                 (binding.edEmail.getText().toString(), binding.edPassword.getText().toString()).
                         addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -82,7 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 dialog.dismiss();
                                 if (task.isSuccessful()) {
                                     Users user = new Users(binding.edUserName.getText().toString(), binding.edEmail.getText().toString(),
-                                            binding.edPassword.getText().toString());
+                                            passwordEncrypted);
 
                                     // Get the current user id
                                     String id = task.getResult().getUser().getUid();
@@ -138,6 +146,24 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+    public String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i=0; i<messageDigest.length; i++)
+                hexString.append(String.format("%02X", messageDigest[i]));
+
+            return hexString.toString();
+        }catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 }

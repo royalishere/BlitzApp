@@ -52,6 +52,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class SignInActivity extends AppCompatActivity {
 
     ActivitySignInBinding binding;
@@ -122,6 +125,9 @@ public class SignInActivity extends AppCompatActivity {
                     return;
                 }
                 dialog.show();
+                //encrypt password
+
+
 
                 auth.signInWithEmailAndPassword(binding.edEmail.getText().toString(),
                                 binding.edPassword.getText().toString()).
@@ -297,6 +303,24 @@ public class SignInActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    public String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i=0; i<messageDigest.length; i++)
+                hexString.append(String.format("%02X", messageDigest[i]));
+
+            return hexString.toString();
+        }catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 
