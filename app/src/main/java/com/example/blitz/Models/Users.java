@@ -21,6 +21,13 @@ public class Users {
     public Users() {
     }
 
+    public Users(String userName, String mail, String password, String profilePicture) {
+        this.userName = userName;
+        this.mail = mail;
+        this.password = password;
+        this.profilePicture = profilePicture;
+    }
+
     // Sign Up Constructor
     public Users(String userName, String mail, String password) {
         this.userName = userName;
@@ -29,12 +36,15 @@ public class Users {
     }
 
     // Getters and Setters
+    public String getStatus() {
+        return status;
+    }
 
-    public String getProfilePic() {
+    public String getProfilePicture() {
         return profilePicture;
     }
 
-    public void setProfilePic(String profilePicture) {
+    public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
     }
 
@@ -76,10 +86,6 @@ public class Users {
 
     public void setLastMessage(String lastMessage) {
         this.lastMessage = lastMessage;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public void setStatus(String status) {

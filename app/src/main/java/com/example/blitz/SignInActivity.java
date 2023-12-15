@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -67,8 +68,6 @@ public class SignInActivity extends AppCompatActivity {
 
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +84,8 @@ public class SignInActivity extends AppCompatActivity {
         builder.setView(R.layout.process);
         AlertDialog dialog = builder.create();
 
-
+        // Set Default Night Mode
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
 
         //Continue with Google Sign In
@@ -166,7 +166,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         // Check if user is already logged in
-        if (auth.getCurrentUser() != null) {
+        if (auth.getCurrentUser() != null){
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
             startActivity(intent);
         }
@@ -273,7 +273,7 @@ public class SignInActivity extends AppCompatActivity {
                     Users users = new Users();
                     users.setUserId(user.getUid());
                     users.setUserName(user.getDisplayName());
-                    users.setProfilePic(user.getPhotoUrl().toString());
+                    users.setProfilePicture(user.getPhotoUrl().toString());
                     users.setMail(user.getEmail());
                     database.getReference().child("Users").child(user.getUid()).setValue(users);
 
