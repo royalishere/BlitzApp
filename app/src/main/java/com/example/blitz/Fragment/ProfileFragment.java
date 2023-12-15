@@ -53,6 +53,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 /**
@@ -280,10 +282,20 @@ public class ProfileFragment extends Fragment {
 
                 //if user login with google
                 if (acct != null) {
-                    signOut_google();
+                    mGoogleSignInClient.signOut();
+                    //delete token
+                    database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("token")
+                            .setValue("");
+                    Toast.makeText(getActivity(), "Logout gg acct", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), SignInActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
+
+
                 //if user login with email and password
-                else if(auth.getCurrentUser() != null){
+                if(auth.getCurrentUser() != null){
                     //delete token
                     database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("token")
                             .setValue("");
@@ -349,7 +361,7 @@ public class ProfileFragment extends Fragment {
 
 
 
-                        builder.setView(dialogView);
+                    builder.setView(dialogView);
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     dialogView.findViewById(R.id.btnChange_CP_dialog).setOnClickListener(new View.OnClickListener() {
@@ -361,7 +373,7 @@ public class ProfileFragment extends Fragment {
                                 return;
                             }
                             if (!edNewPass.getText().toString().equals(edConfirmPass.getText().toString())) {
-                                Toast.makeText(getActivity(), "Password does not match", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), "Confirm password does not match", Toast.LENGTH_SHORT).show();
                                 return;
                             }
                             if (edNewPass.getText().toString().length() < 6) {
@@ -375,25 +387,25 @@ public class ProfileFragment extends Fragment {
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                                             Users users = snapshot.getValue(Users.class);
                                             password = users.getPassword();
-                                            if (password.equals(edCurrentPass.getText().toString())) {
+                                            String currentPass_encrypted = md5(edCurrentPass.getText().toString());
+                                            String newPass_encrypted = md5(edNewPass.getText().toString());
+                                            if (password.equals(currentPass_encrypted) && !password.equals(newPass_encrypted)){
 
 
                                                 auth.getCurrentUser().updatePassword(edNewPass.getText().toString());
 
 
-                                                String newPassword = edNewPass.getText().toString();
-                                                String confirmPassword = edConfirmPass.getText().toString();
 
 
-                                                if (newPassword.equals(confirmPassword)) {
+
                                                     database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("password")
-                                                            .setValue(newPassword);
+                                                            .setValue(newPass_encrypted);
                                                     Toast.makeText(getActivity(), "Password is changed", Toast.LENGTH_SHORT).show();
                                                     dialog.dismiss();
-                                                } else {
+                                            } else {
                                                     Toast.makeText(getActivity(), "Password does not match", Toast.LENGTH_SHORT).show();
                                                 }
-                                            }
+
                                         }
 
                                         @Override
@@ -671,6 +683,25 @@ public class ProfileFragment extends Fragment {
 
 
         return true;
+    }
+
+    public String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i=0; i<messageDigest.length; i++)
+                hexString.append(String.format("%02X", messageDigest[i]));
+
+            return hexString.toString();
+        }catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 

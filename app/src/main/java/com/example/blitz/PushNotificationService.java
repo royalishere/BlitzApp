@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -15,6 +16,8 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.scottyab.aescrypt.AESCrypt;
 
+import java.security.GeneralSecurityException;
+
 public class PushNotificationService extends FirebaseMessagingService {
     @SuppressLint("NewApi")
 
@@ -23,11 +26,19 @@ public class PushNotificationService extends FirebaseMessagingService {
         String title = remoteMessage.getNotification().getTitle();
         String text = remoteMessage.getNotification().getBody();
 
-        try {
+
+        //decrypt message
+        try
+        {
             text = AESCrypt.decrypt(getString(R.string.key_encrypt),text);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new RuntimeException(e);
         }
+
+
+
 
         String channel_id = "MESSAGE";
 
@@ -40,7 +51,7 @@ public class PushNotificationService extends FirebaseMessagingService {
         Context context;
         Notification.Builder notification = new Notification.Builder(this, channel_id)
                 .setContentTitle(title)
-                .setContentText(text)
+                .setContentText(text )
                 .setSmallIcon(R.drawable.chat_2_svgrepo_com)
                 .setAutoCancel(true);
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {

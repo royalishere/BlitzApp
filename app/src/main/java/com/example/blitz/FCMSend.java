@@ -21,6 +21,19 @@ public class FCMSend {
     private static String BASE_URL = "https://fcm.googleapis.com/fcm/send";
     private static String SERVER_KEY ="key=AAAA_prCY-s:APA91bGVn6nFzD2NhAbwg_Sil9IJ_OqpuHEErRxTCB3lzb3ELaOJgC8wyZQRCBSzSHFIfHz1UB3OLCLO7hqwLMzTTdJP5rm2aJFJt0uqp2zjoD429uX-QH3ZzrNlnJmssc27a3l5bj0f";
 
+    /*
+    header:
+    Content-Type: application/json
+    Authorization: key=....
+    {
+    "to" :"TOKEN",
+    "notification":{
+        "title":title,
+        "body": body
+    }
+    }
+*/
+
     public static void pushNotification(Context context, String token, String title, String body) {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
