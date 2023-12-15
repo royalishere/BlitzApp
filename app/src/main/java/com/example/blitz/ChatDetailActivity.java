@@ -47,8 +47,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.scottyab.aescrypt.AESCrypt;
 import com.squareup.picasso.Picasso;
 
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -130,7 +132,16 @@ public class ChatDetailActivity extends AppCompatActivity {
                                     messages.clear();
                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                         Message message = snapshot1.getValue(Message.class);
+                                        //decrypt message
+                                        String messageTxt = message.getMessage();
+                                        try {
+                                            messageTxt = AESCrypt.decrypt(getString(R.string.key_encrypt),messageTxt);
+                                            message.setMessage(messageTxt);
+                                        } catch (Exception e) {
+                                            throw new RuntimeException(e);
+                                        }
                                         messages.add(message);
+
                                     }
                                     adapter.notifyDataSetChanged();
                                 }
@@ -166,8 +177,16 @@ public class ChatDetailActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     String messageTxt = binding.chatEditText.getText().toString();
+                    //encrypt message
+                    try {
+                        messageTxt = AESCrypt.encrypt(getString(R.string.key_encrypt),messageTxt);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+
                     final Message message = new Message(senderId, messageTxt);
                     message.setTimestamp(new Date().getTime());
+
                     binding.chatEditText.setText("");
                     database.getReference().child("chats").child(senderRoom).push().setValue(message)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {

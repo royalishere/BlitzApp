@@ -61,6 +61,9 @@ dependencies {
     implementation ("androidx.recyclerview:recyclerview-selection:1.1.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
 
+    implementation ("com.scottyab:aescrypt:0.0.1")
+
+
 
 
 

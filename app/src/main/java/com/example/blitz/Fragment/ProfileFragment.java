@@ -30,11 +30,14 @@ import com.example.blitz.Change_info;
 import com.example.blitz.Models.Users;
 import com.example.blitz.R;
 import com.example.blitz.SignInActivity;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.internal.Storage;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -280,7 +283,7 @@ public class ProfileFragment extends Fragment {
                     signOut_google();
                 }
                 //if user login with email and password
-                else {
+                else if(auth.getCurrentUser() != null){
                     //delete token
                     database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("token")
                             .setValue("");
@@ -601,8 +604,6 @@ public class ProfileFragment extends Fragment {
                 //delete token
                 database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid()).child("token")
                         .setValue("");
-
-
                 Toast.makeText(getActivity(), "Logout gg acct", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), SignInActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -610,6 +611,8 @@ public class ProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+
     }
 
     @Override
