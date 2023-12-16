@@ -1,9 +1,13 @@
 package com.example.blitz.Adapters;
 
+import static android.content.Intent.getIntent;
+import static android.provider.Settings.System.getString;
 import static androidx.core.content.ContextCompat.startActivity;
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
@@ -16,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,8 +30,11 @@ import com.example.blitz.Models.Message;
 import com.example.blitz.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.scottyab.aescrypt.AESCrypt;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,6 +47,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
     int RECEIVER_VIEW_TYPE = 2;
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
     private ChatDetailActivity.OnListItemClick onListItemClick;
 
     public ChatAdapter(ArrayList<Message> messages, Context context) {
@@ -60,8 +69,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = messages.get(position);
-        if (message.getType().equals("text"))
-        {
+        if (message.getType().equals("text")) {
             if (holder.getClass() == SenderViewHolder.class) {
                 ((SenderViewHolder) holder).senderMsg.setText(message.getMessage());
                 String formattedDate = DateFormat.format("dd.MM.yyyy  hh:mm", message.getTimestamp()).toString();
@@ -81,10 +89,9 @@ public class ChatAdapter extends RecyclerView.Adapter{
                 ((ReceiverViewHolder) holder).recieverImage.setVisibility(View.GONE);
             }
         }
-        if (message.getType().equals("image"))
-        {
+        if (message.getType().equals("image")) {
             if (holder.getClass() == SenderViewHolder.class) {
-               //----------
+                //----------
                 //hide sender text
                 ((SenderViewHolder) holder).senderMsg.setVisibility(View.GONE);
                 ((SenderViewHolder) holder).senderTime.setVisibility(View.GONE);
@@ -106,7 +113,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
                             @Override
                             public void onSuccess(Uri uri) {
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
-                                ((SenderViewHolder)holder).senderImage.getContext().startActivity(intent);
+                                ((SenderViewHolder) holder).senderImage.getContext().startActivity(intent);
                             }
                         });
 
@@ -115,10 +122,6 @@ public class ChatAdapter extends RecyclerView.Adapter{
 
 
                 //resize image : size of image /3
-
-
-
-
 
 
             } else {
@@ -144,7 +147,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
                             @Override
                             public void onSuccess(Uri uri) {
                                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
-                                ((ReceiverViewHolder)holder).recieverImage.getContext().startActivity(intent);
+                                ((ReceiverViewHolder) holder).recieverImage.getContext().startActivity(intent);
                             }
                         });
 
@@ -153,90 +156,161 @@ public class ChatAdapter extends RecyclerView.Adapter{
                 //resize image : size of image /3
 
 
-
             }
-        }
-        else
-        {
+        } else if (message.getType().equals("pdf") || message.getType().equals("docx")){
+            if (holder.getClass() == SenderViewHolder.class) {
+                //----------
+                //hide sender text
+                ((SenderViewHolder) holder).senderMsg.setVisibility(View.GONE);
+                ((SenderViewHolder) holder).senderTime.setVisibility(View.GONE);
+                //----------
+                ((SenderViewHolder) holder).senderImage.setVisibility(View.VISIBLE);
+                if (message.getType().equals("pdf")) {
+                    Picasso.get().load(R.drawable.pdf).into(((SenderViewHolder) holder).senderImage);
+                }
+                if (message.getType().equals("docx")) {
+                    Picasso.get().load(R.drawable.doc).into(((SenderViewHolder) holder).senderImage);
+                }
+                ((SenderViewHolder) holder).senderImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StorageReference reference = storage.getReference().child("Document Files").child(message.getMessage());
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                                ((SenderViewHolder) holder).senderImage.getContext().startActivity(intent);
+                            }
+                        });
+                    }
+
+                    //save file to local
+
+
+                });
+
+
+            } else
             {
-                if (holder.getClass() == SenderViewHolder.class) {
-                    //----------
-                    //hide sender text
-                    ((SenderViewHolder) holder).senderMsg.setVisibility(View.GONE);
-                    ((SenderViewHolder) holder).senderTime.setVisibility(View.GONE);
-                    //----------
-                    ((SenderViewHolder) holder).senderImage.setVisibility(View.VISIBLE);
-                    if (message.getType().equals("pdf")) {
-                        Picasso.get().load(R.drawable.pdf).into(((SenderViewHolder) holder).senderImage);
-                    }
-                    if (message.getType().equals("docx")) {
-                        Picasso.get().load(R.drawable.doc).into(((SenderViewHolder) holder).senderImage);
-                    }
-                    ((SenderViewHolder) holder).senderImage.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            StorageReference reference = storage.getReference().child("Document Files").child(message.getMessage());
-                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
-                                    ((SenderViewHolder)holder).senderImage.getContext().startActivity(intent);
-                                }
-                            });
-                        }
+                //----------
+                //hide receiver text
+                ((ReceiverViewHolder) holder).recieverMsg.setVisibility(View.GONE);
+                ((ReceiverViewHolder) holder).recieverTime.setVisibility(View.GONE);
+                //----------
+                ((ReceiverViewHolder) holder).recieverImage.setVisibility(View.VISIBLE);
+                if (message.getType().equals("pdf")) {
+                    Picasso.get().load(R.drawable.pdf).into(((ReceiverViewHolder) holder).recieverImage);
+                }
+                if (message.getType().equals("docx")) {
+                    Picasso.get().load(R.drawable.doc).into(((ReceiverViewHolder) holder).recieverImage);
+                }
 
-                            //save file to local
-
-
+                ((ReceiverViewHolder) holder).recieverImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StorageReference reference = storage.getReference().child("Document Files").child(message.getMessage());
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                                ((ReceiverViewHolder) holder).recieverImage.getContext().startActivity(intent);
+                            }
                         });
 
 
-
-
-
-
-
-
-                } else {
-                    //----------
-                    //hide receiver text
-                    ((ReceiverViewHolder) holder).recieverMsg.setVisibility(View.GONE);
-                    ((ReceiverViewHolder) holder).recieverTime.setVisibility(View.GONE);
-                    //----------
-                    ((ReceiverViewHolder) holder).recieverImage.setVisibility(View.VISIBLE);
-                    if (message.getType().equals("pdf")) {
-                        Picasso.get().load(R.drawable.pdf).into(((ReceiverViewHolder) holder).recieverImage);
                     }
-                    if (message.getType().equals("docx")) {
-                        Picasso.get().load(R.drawable.doc).into(((ReceiverViewHolder) holder).recieverImage);
-                    }
+                });
 
-                    ((ReceiverViewHolder) holder).recieverImage.setOnClickListener(new View.OnClickListener() {
+
+            }
+        }
+
+        //delete message
+        String senderId = FirebaseAuth.getInstance().getUid();
+        String receiverId = message.getuId();
+
+        String senderRoom = senderId + receiverId;
+        String receiverRoom = receiverId + senderId;
+        ((SenderViewHolder)holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (holder.getClass() == SenderViewHolder.class) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(((SenderViewHolder) holder).senderImage.getContext());
+                    builder.setTitle("Delete");
+                    builder.setMessage("Are you sure you want to delete this message?");
+                    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
-                            StorageReference reference = storage.getReference().child("Document Files").child(message.getMessage());
-                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            database.getReference().child("chats").child(senderRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
-                                public void onSuccess(Uri uri) {
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
-                                    ((ReceiverViewHolder)holder).recieverImage.getContext().startActivity(intent);
+                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        Message message_db = ds.getValue(Message.class);
+                                        //decrypt message_db
+                                        String message_db_decrypt;
+                                        try {
+                                            message_db_decrypt = AESCrypt.decrypt("helloworld",message_db.getMessage());
+                                            if (message_db_decrypt.equals(message.getMessage())) {
+
+                                                String set_val= "this message was deleted";
+                                                //encrypt set_val
+                                                try{
+                                                    set_val = AESCrypt.encrypt("helloworld",set_val);
+                                                    ds.getRef().child("message").setValue(set_val);
+                                                } catch (Exception e) {}
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
                                 }
                             });
+                            database.getReference().child("chats").child(receiverRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                @Override
+                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        Message message_db = ds.getValue(Message.class);
+                                        //decrypt message_db
+                                        String message_db_decrypt;
+                                        try {
+                                            message_db_decrypt = AESCrypt.decrypt("helloworld",message_db.getMessage());
+                                            if (message_db_decrypt.equals(message.getMessage())) {
+                                                String set_val= "this message was deleted";
+                                                //encrypt set_val
+                                                try{
+                                                    set_val = AESCrypt.encrypt("helloworld",set_val);
+                                                    ds.getRef().child("message").setValue(set_val);
+                                                } catch (Exception e) {}
 
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }
+                            });
 
 
                         }
                     });
-
-
-
+                    builder.setNegativeButton("Cancel", null);
+                    builder.show();
                 }
+
+
+
+
+                return true;
             }
+        });
 
 
 
-        }
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -245,7 +319,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemViewType(int position) {
-        if(messages.get(position).getuId().equals(FirebaseAuth.getInstance().getUid())) {
+        if(!messages.get(position).getuId().equals(FirebaseAuth.getInstance().getUid())) {
             return SENDER_VIEW_TYPE;
         } else {
             return RECEIVER_VIEW_TYPE;
@@ -274,25 +348,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
         }
     }
 
-    public void scaleImage(ImageView imageView) {
-        // Lấy chiều rộng và chiều cao của tấm ảnh
-        Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
 
-        // Tính toán hệ số thu nhỏ
-        float scale = Math.max(250.0f / width, 250.0f / height);
-
-        // Tạo một matrix để áp dụng hệ số thu nhỏ
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale, scale);
-
-        // Tạo một bitmap mới với kích thước đã được thu nhỏ
-        Bitmap scaledBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true);
-
-        // Đặt bitmap mới vào `ImageView`
-        imageView.setImageBitmap(scaledBitmap);
-    }
 
 
 
