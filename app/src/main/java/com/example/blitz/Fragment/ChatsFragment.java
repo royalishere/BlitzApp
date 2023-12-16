@@ -37,16 +37,20 @@ public class ChatsFragment extends Fragment {
     FirebaseDatabase database;
     Button chat_btn, group_btn;
     UsersAdapter adapter;
-    boolean fetching = false;
+    Bundle bundle;
+
+    @Override
+public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        database = FirebaseDatabase.getInstance();
+        new FetchUsersFromFirebase().execute();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
-
-        // if dark mode is enabled, set background color to black
-
-
 
         chat_btn = binding.chatBtn;
         group_btn = binding.groupchatBtn;
@@ -84,8 +88,6 @@ public class ChatsFragment extends Fragment {
             }
         });
 
-        // fetch users from firebase
-        new FetchUsersFromFirebase().execute();
         chat_btn.performClick();
         return binding.getRoot();
     }
@@ -105,6 +107,8 @@ public class ChatsFragment extends Fragment {
                         users.setUserId(dataSnapshot.getKey());
                         chatlist.add(users);
                     }
+                    bundle = new Bundle();
+                    bundle.putSerializable("allUsers", chatlist);
                     adapter.notifyDataSetChanged();
                 }
 

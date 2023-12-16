@@ -106,7 +106,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 super(itemView);
                 image = itemView.findViewById(R.id.profile_image);
                 userName = itemView.findViewById(R.id.username);
-                lastMessage = itemView.findViewById(R.id.last_msg);
+                lastMessage = itemView.findViewById(R.id.u_status);
             }
     }
 }
