@@ -3,6 +3,7 @@ package com.example.blitz.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,10 +68,20 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                             if (last_msg.length() > 20) {
                                 last_msg = last_msg.substring(0, 20) + "...";
                             }
-                            holder.lastMessage.setText(last_msg);
+
+                            holder.lastMessage.setText(last_msg );
                         }
                         else if(dataSnapshot.child("type").getValue().toString().equals("image")){
-                            holder.lastMessage.setText("Image");
+
+                            holder.lastMessage.setText("Photo ");
+                        }
+                        else if(dataSnapshot.child("type").getValue().toString().equals("pdf")){
+
+                            holder.lastMessage.setText("PDF File ");
+                        }
+                        else if(dataSnapshot.child("type").getValue().toString().equals("docx")){
+
+                            holder.lastMessage.setText("Document File " );
                         }
                     }
                 }

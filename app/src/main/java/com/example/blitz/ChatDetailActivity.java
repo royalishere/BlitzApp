@@ -43,6 +43,7 @@ import com.example.blitz.Models.Users;
 import com.example.blitz.databinding.ActivityConversationBinding;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -53,8 +54,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.scottyab.aescrypt.AESCrypt;
 import com.squareup.picasso.Picasso;
 
@@ -146,13 +149,12 @@ public class ChatDetailActivity extends AppCompatActivity {
 
             final String senderRoom = senderId + receiverId;
             final String receiverRoom = receiverId + senderId;
-
+            dialog.show();
             database.getReference().child("chats").child(senderRoom)
                             .addValueEventListener(new ValueEventListener() {
 
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    dialog.show();
                                     messages.clear();
                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                         Message message = snapshot1.getValue(Message.class);
@@ -170,16 +172,23 @@ public class ChatDetailActivity extends AppCompatActivity {
                                         else if (message.getType().equals("image")) {
                                             messages.add(message);
                                         }
+                                        else if (message.getType().equals("pdf")) {
+                                            messages.add(message);
+                                        }
+                                        else if (message.getType().equals("docx")) {
+                                            messages.add(message);
+                                        }
 
                                     }
                                     adapter.notifyDataSetChanged();
-                                    dialog.dismiss();
                                 }
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
                                 }
                             });
+            dialog.dismiss();
+
 
             binding.chatEditText.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -349,7 +358,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                                     {
                                             "Images",
                                             "PDF Files",
-                                            "Files docx"
+                                            "Files doc"
                                     };
                             AlertDialog.Builder builder = new AlertDialog.Builder(ChatDetailActivity.this);
                             builder.setTitle("Select the file");
@@ -369,10 +378,24 @@ public class ChatDetailActivity extends AppCompatActivity {
                                         case 1:
                                             //send pdf
                                             checker = "pdf";
+
+                                            Intent intent1 = new Intent();
+                                            intent1.setAction(Intent.ACTION_GET_CONTENT);
+                                            intent1.setType("application/pdf");
+                                            startActivityForResult(intent1.createChooser(intent1, "Select PDF File"), 438);
+
+
                                             break;
                                         case 2:
                                             //send docx
                                             checker = "docx";
+
+                                            Intent intent2 = new Intent();
+                                            intent2.setAction(Intent.ACTION_GET_CONTENT);
+                                            intent2.setType("application/msword");
+                                            startActivityForResult(intent2.createChooser(intent2, "Select Word File"), 438);
+
+
                                             break;
                                     }
                                 }
@@ -388,22 +411,98 @@ public class ChatDetailActivity extends AppCompatActivity {
 
             if (requestCode==438 && resultCode==RESULT_OK && data!=null && data.getData()!=null)
             {
-
-
-
-
+                // Progress Dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(ChatDetailActivity.this);
+                builder.setCancelable(false); // if you want user to wait for some process to finish,
+                builder.setTitle("Sending file")
+                        .setMessage("Please wait...")
+                        .setCancelable(false);
+                AlertDialog dialog = builder.create();
+                dialog.show();
 
                 fileUri = data.getData();
-
                 if (!checker.equals("image"))
                 {
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Document Files");
+                    //get uid
+                    final String senderId = auth.getUid();
+                    String receiverId = getIntent().getStringExtra("userId");
 
+                    //get chat room
+                    final String senderRoom = senderId + receiverId;
+                    final String receiverRoom = receiverId + senderId;
+
+                    DatabaseReference user_sender_message_key = database.getReference().child("chats").child(senderRoom).push();
+                    DatabaseReference user_receiver_message_key = database.getReference().child("chats").child(receiverRoom).push();
+
+                    final String messagePushId_sender = user_sender_message_key.getKey();
+                    final String messagePushId_receiver = user_receiver_message_key.getKey();
+
+                    StorageReference filePath = storageReference.child(messagePushId_sender );
+
+                    filePath.putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                String messageTxt = messagePushId_sender;
+                                //make message
+                                final Message message = new Message(senderId, messageTxt);
+                                message.setTimestamp(new Date().getTime());
+                                message.setType(checker);
+
+                                database.getReference().child("chats").child(senderRoom).push().setValue(message)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                if (!senderRoom.equals(receiverRoom)) {
+                                                    database.getReference().child("chats").child(receiverRoom).push().setValue(message)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    //make body of notification
+                                                                    String body;
+
+                                                                    body = user_sender.getUserName() + ": sent a file";
+                                                                    try {
+                                                                        body = AESCrypt.encrypt(getString(R.string.key_encrypt), body);
+                                                                    } catch (Exception e) {
+                                                                        throw new RuntimeException(e);
+                                                                    }
+                                                                    FCMSend.pushNotification(ChatDetailActivity.this,
+                                                                            user_receiver.getToken(),
+                                                                            "You have a new message",
+                                                                            body);
+
+
+                                                                }
+                                                            });
+                                                }
+                                            }
+                                        });
+
+                                dialog.dismiss();
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            dialog.dismiss();
+                            Toast.makeText(ChatDetailActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                            double p = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
+                            builder.setTitle("Sending file")
+                                    .setMessage("Please wait..."+(int)p+"%")
+                                    .setCancelable(false);
+                            dialog.show();
+
+                        }
+                    });
                 }
                 else if (checker.equals("image")) {
-
-
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Files");
-
                     //get uid
                     final String senderId = auth.getUid();
                     String receiverId = getIntent().getStringExtra("userId");
@@ -438,13 +537,7 @@ public class ChatDetailActivity extends AppCompatActivity {
 
                                 //make message
                                 String messageTxt = messagePushId_sender;
-//                                //encrypt message
-//                                try {
-//                                    messageTxt = AESCrypt.encrypt(getString(R.string.key_encrypt),messageTxt);
-//                                } catch (Exception e) {
-//                                    throw new RuntimeException(e);
-//                                }
-
+//
                                 final Message message = new Message(senderId, messageTxt);
                                 message.setTimestamp(new Date().getTime());
                                 message.setType("image");
@@ -461,7 +554,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                                                                     //make body of notification
                                                                     String body;
 
-                                                                    body = user_sender.getUserName() + ": " + message.getMessage();
+                                                                    body = user_sender.getUserName() + ": sent a photo" ;
                                                                     try {
                                                                         body = AESCrypt.encrypt(getString(R.string.key_encrypt), body);
                                                                     } catch (Exception e) {
@@ -478,6 +571,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                                                 }
                                             }
                                         });
+                                dialog.dismiss();
                             }
 
 

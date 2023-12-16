@@ -66,7 +66,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
     <ImageView
         android:background="@drawable/white_box"
-        android:padding="5dp"
+        android:padding="7dp"
         android:id="@+id/senderImage"
         android:layout_marginTop="8dp"
         android:layout_width="250dp"
@@ -75,5 +75,8 @@
         android:scaleType="fitCenter"
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
+        android:clickable="true"
+
+        android:src="@drawable/landscape_placeholder"
         />
 </RelativeLayout>

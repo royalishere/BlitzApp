@@ -1,6 +1,10 @@
 package com.example.blitz.Adapters;
 
+import static androidx.core.content.ContextCompat.startActivity;
+
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
@@ -93,6 +97,23 @@ public class ChatAdapter extends RecyclerView.Adapter{
                         Picasso.get().load(uri).into(((SenderViewHolder) holder).senderImage);
                     }
                 });
+
+                ((SenderViewHolder) holder).senderImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StorageReference reference = storage.getReference().child("Image Files").child(message.getMessage());
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                                ((SenderViewHolder)holder).senderImage.getContext().startActivity(intent);
+                            }
+                        });
+
+                    }
+                });
+
+
                 //resize image : size of image /3
 
 
@@ -114,11 +135,106 @@ public class ChatAdapter extends RecyclerView.Adapter{
                         Picasso.get().load(uri).into(((ReceiverViewHolder) holder).recieverImage);
                     }
                 });
+
+                ((ReceiverViewHolder) holder).recieverImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        StorageReference reference = storage.getReference().child("Image Files").child(message.getMessage());
+                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                            @Override
+                            public void onSuccess(Uri uri) {
+                                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                                ((ReceiverViewHolder)holder).recieverImage.getContext().startActivity(intent);
+                            }
+                        });
+
+                    }
+                });
                 //resize image : size of image /3
 
 
 
             }
+        }
+        else
+        {
+            {
+                if (holder.getClass() == SenderViewHolder.class) {
+                    //----------
+                    //hide sender text
+                    ((SenderViewHolder) holder).senderMsg.setVisibility(View.GONE);
+                    ((SenderViewHolder) holder).senderTime.setVisibility(View.GONE);
+                    //----------
+                    ((SenderViewHolder) holder).senderImage.setVisibility(View.VISIBLE);
+                    if (message.getType().equals("pdf")) {
+                        Picasso.get().load(R.drawable.pdf).into(((SenderViewHolder) holder).senderImage);
+                    }
+                    if (message.getType().equals("docx")) {
+                        Picasso.get().load(R.drawable.doc).into(((SenderViewHolder) holder).senderImage);
+                    }
+                    ((SenderViewHolder) holder).senderImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            StorageReference reference = storage.getReference().child("Document Files").child(message.getMessage());
+                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                                    ((SenderViewHolder)holder).senderImage.getContext().startActivity(intent);
+                                }
+                            });
+                        }
+
+                            //save file to local
+
+
+                        });
+
+
+
+
+
+
+
+
+                } else {
+                    //----------
+                    //hide receiver text
+                    ((ReceiverViewHolder) holder).recieverMsg.setVisibility(View.GONE);
+                    ((ReceiverViewHolder) holder).recieverTime.setVisibility(View.GONE);
+                    //----------
+                    ((ReceiverViewHolder) holder).recieverImage.setVisibility(View.VISIBLE);
+                    if (message.getType().equals("pdf")) {
+                        Picasso.get().load(R.drawable.pdf).into(((ReceiverViewHolder) holder).recieverImage);
+                    }
+                    if (message.getType().equals("docx")) {
+                        Picasso.get().load(R.drawable.doc).into(((ReceiverViewHolder) holder).recieverImage);
+                    }
+
+                    ((ReceiverViewHolder) holder).recieverImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            StorageReference reference = storage.getReference().child("Document Files").child(message.getMessage());
+                            reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri.toString()));
+                                    ((ReceiverViewHolder)holder).recieverImage.getContext().startActivity(intent);
+                                }
+                            });
+
+
+
+                        }
+                    });
+
+
+
+                }
+            }
+
+
+
         }
     }
 
