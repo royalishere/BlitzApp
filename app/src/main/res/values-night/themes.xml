@@ -25,6 +25,8 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:itemTextAppearance">@style/textMenu</item>
+        <item name="android:buttonTint">@color/white</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.Blitz" parent="Base.Theme.Blitz" />
@@ -51,5 +53,10 @@
         parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/rounded_edittext_dark</item>
+    </style>
+
+    <style name="textMenu">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">15sp</item>
     </style>
 </resources>

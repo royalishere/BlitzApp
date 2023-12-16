@@ -11,6 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:itemTextAppearance">@style/textMenu</item>
         <!-- Customize your theme here. -->
     </style>
     <style name="Theme.Blitz" parent="Base.Theme.Blitz" />
@@ -37,6 +38,11 @@
         parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/black</item>
         <item name="android:background">@drawable/rounded_edittext</item>
+    </style>
+    
+    <style name="textMenu">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">15sp</item>
     </style>
 
 
