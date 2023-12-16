@@ -149,7 +149,7 @@ public class ChatDetailActivity extends AppCompatActivity {
 
             final String senderRoom = senderId + receiverId;
             final String receiverRoom = receiverId + senderId;
-            dialog.show();
+
             database.getReference().child("chats").child(senderRoom)
                             .addValueEventListener(new ValueEventListener() {
 
@@ -159,7 +159,8 @@ public class ChatDetailActivity extends AppCompatActivity {
                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                         Message message = snapshot1.getValue(Message.class);
                                         //----------
-                                        if (message.getType().equals("text")) {//decrypt message
+                                        if (message.getType().equals("text")) {
+                                            //decrypt message
                                             String messageTxt = message.getMessage();
                                             try {
                                                 messageTxt = AESCrypt.decrypt(getString(R.string.key_encrypt), messageTxt);
@@ -175,7 +176,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                                         else if (message.getType().equals("pdf")) {
                                             messages.add(message);
                                         }
-                                        else if (message.getType().equals("docx")) {
+                                        else if (message.getType().equals("doc")) {
                                             messages.add(message);
                                         }
 
@@ -187,7 +188,8 @@ public class ChatDetailActivity extends AppCompatActivity {
                                 public void onCancelled(@NonNull DatabaseError error) {
                                 }
                             });
-            dialog.dismiss();
+
+
 
 
             binding.chatEditText.addTextChangedListener(new TextWatcher() {
@@ -387,8 +389,8 @@ public class ChatDetailActivity extends AppCompatActivity {
 
                                             break;
                                         case 2:
-                                            //send docx
-                                            checker = "docx";
+                                            //send doc
+                                            checker = "doc";
 
                                             Intent intent2 = new Intent();
                                             intent2.setAction(Intent.ACTION_GET_CONTENT);
