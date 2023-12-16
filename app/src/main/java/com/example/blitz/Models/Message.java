@@ -1,13 +1,14 @@
 package com.example.blitz.Models;
 
 public class Message {
-    String uId, message;
+    String uId, message,type;
     Long timestamp;
 
-    public Message(String uId, String message, Long timestamp) {
+    public Message(String uId, String message, Long timestamp, String type) {
         this.uId = uId;
         this.message = message;
         this.timestamp = timestamp;
+        this.type = type;
     }
 
     public Message(String uId, String message) {
@@ -34,6 +35,7 @@ public class Message {
 //        return timestamp;
 //    }
 
+
     public String getuId() {
         return uId;
     }
@@ -48,6 +50,14 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Long getTimestamp() {
