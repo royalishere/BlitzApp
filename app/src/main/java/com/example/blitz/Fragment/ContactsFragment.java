@@ -49,20 +49,7 @@ public class ContactsFragment extends Fragment {
         binding.friendsRecyclerView.setAdapter(adapter);
 
         // fetch contacts from firebase
-        new FetchContacts().execute();
         return binding.getRoot();
     }
 
-    private class FetchContacts extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
-            // get current user id
-            String uid = auth.getCurrentUser().getUid();
-            Bundle bundle = getArguments();
-            if(bundle != null)
-                allUsers = (ArrayList<Users>) bundle.getSerializable("allUsers");
-
-            return null;
-        }
-    }
 }

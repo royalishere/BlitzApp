@@ -15,10 +15,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.blitz.Adapters.UsersAdapter;
+import com.example.blitz.MainActivity;
 import com.example.blitz.Models.Users;
 import com.example.blitz.R;
 import com.example.blitz.databinding.FragmentChatsBinding;
 import com.google.firebase.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -37,20 +39,14 @@ public class ChatsFragment extends Fragment {
     FirebaseDatabase database;
     Button chat_btn, group_btn;
     UsersAdapter adapter;
-    Bundle bundle;
 
-    @Override
-public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        database = FirebaseDatabase.getInstance();
-        new FetchUsersFromFirebase().execute();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
+        new FetchUsersFromFirebase().execute();
 
         chat_btn = binding.chatBtn;
         group_btn = binding.groupchatBtn;
@@ -96,25 +92,30 @@ public void onCreate(Bundle savedInstanceState) {
     private class FetchUsersFromFirebase extends AsyncTask<Void, Void, Void> {
         @Override
         protected Void doInBackground(Void... voids) {
-            database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
+            // get current user id
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            database.getReference().child("Users").child(uid).child("friendList").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     chatlist.clear();
-                    for(DataSnapshot dataSnapshot : snapshot.getChildren())
-                    {
-                        // get full attributes of Users class
-                        Users users = dataSnapshot.getValue(Users.class);
-                        users.setUserId(dataSnapshot.getKey());
-                        chatlist.add(users);
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        // for each key in friendList, get the user info
+                        database.getReference().child("Users").child((String) dataSnapshot.getKey()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Users user = snapshot.getValue(Users.class);
+                                chatlist.add(user);
+                                adapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
                     }
-                    bundle = new Bundle();
-                    bundle.putSerializable("allUsers", chatlist);
-                    adapter.notifyDataSetChanged();
                 }
 
                 @Override
-                public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
-
+                public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
             return null;

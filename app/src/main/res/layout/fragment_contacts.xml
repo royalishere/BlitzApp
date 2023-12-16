@@ -20,16 +20,14 @@
             android:src="@android:drawable/ic_menu_search"
             app:tint="@color/white" />
 
-        <TextView
-            android:id="@+id/search_textView"
-            style="@style/colorHint1"
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:text="Search via mail, phone number or UID..."
-            android:textSize="16sp" />
+            android:background="@android:color/transparent"
+            android:ems="10"
+            android:inputType="text" />
+
     </TableRow>
 
     <androidx.recyclerview.widget.RecyclerView
