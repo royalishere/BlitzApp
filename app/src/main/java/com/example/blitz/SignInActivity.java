@@ -174,6 +174,7 @@ public class SignInActivity extends AppCompatActivity {
         // Check if user is already logged in
         if (auth.getCurrentUser() != null){
             Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
 
