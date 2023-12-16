@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -16,13 +17,16 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,22 +35,26 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.blitz.Adapters.ChatAdapter;
 import com.example.blitz.Models.Message;
 import com.example.blitz.Models.Users;
 import com.example.blitz.databinding.ActivityConversationBinding;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.scottyab.aescrypt.AESCrypt;
 import com.squareup.picasso.Picasso;
 
@@ -61,6 +69,12 @@ public class ChatDetailActivity extends AppCompatActivity {
         FirebaseStorage storage;
 
         Users user_sender, user_receiver;
+
+        String checker="",myUrl="";
+
+        StorageTask uploadTask;
+
+        Uri fileUri;
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -70,6 +84,12 @@ public class ChatDetailActivity extends AppCompatActivity {
             database = FirebaseDatabase.getInstance();
             auth = FirebaseAuth.getInstance();
             storage = FirebaseStorage.getInstance();
+
+            // Progress Dialog
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChatDetailActivity.this);
+            builder.setCancelable(false); // if you want user to wait for some process to finish,
+            builder.setView(R.layout.process);
+            AlertDialog dialog = builder.create();
 
 
 
@@ -84,6 +104,8 @@ public class ChatDetailActivity extends AppCompatActivity {
             binding.usrname.setText(userName);
             Picasso.get().load(profilePic).placeholder(R.drawable.hacker).into(binding.profileImage);
 
+
+            //get user info
             database.getReference().child("Users").child(receiverId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -95,7 +117,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                 public void onCancelled(@NonNull DatabaseError error) {
                 }
             });
-
+            //get user info
             database.getReference().child("Users").child(senderId).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -127,23 +149,31 @@ public class ChatDetailActivity extends AppCompatActivity {
 
             database.getReference().child("chats").child(senderRoom)
                             .addValueEventListener(new ValueEventListener() {
+
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    dialog.show();
                                     messages.clear();
                                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                                         Message message = snapshot1.getValue(Message.class);
-                                        //decrypt message
-                                        String messageTxt = message.getMessage();
-                                        try {
-                                            messageTxt = AESCrypt.decrypt(getString(R.string.key_encrypt),messageTxt);
-                                            message.setMessage(messageTxt);
-                                        } catch (Exception e) {
-                                            throw new RuntimeException(e);
+                                        //----------
+                                        if (message.getType().equals("text")) {//decrypt message
+                                            String messageTxt = message.getMessage();
+                                            try {
+                                                messageTxt = AESCrypt.decrypt(getString(R.string.key_encrypt), messageTxt);
+                                                message.setMessage(messageTxt);
+                                            } catch (Exception e) {
+                                                throw new RuntimeException(e);
+                                            }
+                                            messages.add(message);
                                         }
-                                        messages.add(message);
+                                        else if (message.getType().equals("image")) {
+                                            messages.add(message);
+                                        }
 
                                     }
                                     adapter.notifyDataSetChanged();
+                                    dialog.dismiss();
                                 }
 
                                 @Override
@@ -186,6 +216,7 @@ public class ChatDetailActivity extends AppCompatActivity {
 
                     final Message message = new Message(senderId, messageTxt);
                     message.setTimestamp(new Date().getTime());
+                    message.setType("text");
 
                     binding.chatEditText.setText("");
                     database.getReference().child("chats").child(senderRoom).push().setValue(message)
@@ -307,5 +338,155 @@ public class ChatDetailActivity extends AppCompatActivity {
 
                 };
             });
+
+
+
+            //send file
+                    binding.btnSendFile.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            CharSequence options[] = new CharSequence[]
+                                    {
+                                            "Images",
+                                            "PDF Files",
+                                            "Files docx"
+                                    };
+                            AlertDialog.Builder builder = new AlertDialog.Builder(ChatDetailActivity.this);
+                            builder.setTitle("Select the file");
+                            builder.setItems(options, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    switch (which) {
+                                        case 0:
+                                            checker = "image";
+
+                                            Intent intent = new Intent();
+                                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                                            intent.setType("image/*");
+                                            startActivityForResult(intent.createChooser(intent, "Select Image"), 438);
+
+                                            break;
+                                        case 1:
+                                            //send pdf
+                                            checker = "pdf";
+                                            break;
+                                        case 2:
+                                            //send docx
+                                            checker = "docx";
+                                            break;
+                                    }
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
         }
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
+        {
+            super.onActivityResult(requestCode, resultCode, data);
+
+            if (requestCode==438 && resultCode==RESULT_OK && data!=null && data.getData()!=null)
+            {
+
+
+
+
+
+                fileUri = data.getData();
+
+                if (!checker.equals("image"))
+                {
+
+                }
+                else if (checker.equals("image")) {
+
+
+                    StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Files");
+
+                    //get uid
+                    final String senderId = auth.getUid();
+                    String receiverId = getIntent().getStringExtra("userId");
+
+                    //get chat room
+                    final String senderRoom = senderId + receiverId;
+                    final String receiverRoom = receiverId + senderId;
+
+                    DatabaseReference user_sender_message_key = database.getReference().child("chats").child(senderRoom).push();
+                    DatabaseReference user_receiver_message_key = database.getReference().child("chats").child(receiverRoom).push();
+
+                    final String messagePushId_sender = user_sender_message_key.getKey();
+                    final String messagePushId_receiver = user_receiver_message_key.getKey();
+
+                    StorageReference filePath = storageReference.child(messagePushId_sender );
+
+                    uploadTask = filePath.putFile(fileUri);
+                    uploadTask.continueWithTask(new Continuation() {
+                        @Override
+                        public Object then(@NonNull Task task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+                            return filePath.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUrl = (Uri) task.getResult();
+                                myUrl = downloadUrl.toString();
+
+                                //make message
+                                String messageTxt = messagePushId_sender;
+//                                //encrypt message
+//                                try {
+//                                    messageTxt = AESCrypt.encrypt(getString(R.string.key_encrypt),messageTxt);
+//                                } catch (Exception e) {
+//                                    throw new RuntimeException(e);
+//                                }
+
+                                final Message message = new Message(senderId, messageTxt);
+                                message.setTimestamp(new Date().getTime());
+                                message.setType("image");
+
+                                database.getReference().child("chats").child(senderRoom).push().setValue(message)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                if (!senderRoom.equals(receiverRoom)) {
+                                                    database.getReference().child("chats").child(receiverRoom).push().setValue(message)
+                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void unused) {
+                                                                    //make body of notification
+                                                                    String body;
+
+                                                                    body = user_sender.getUserName() + ": " + message.getMessage();
+                                                                    try {
+                                                                        body = AESCrypt.encrypt(getString(R.string.key_encrypt), body);
+                                                                    } catch (Exception e) {
+                                                                        throw new RuntimeException(e);
+                                                                    }
+                                                                    FCMSend.pushNotification(ChatDetailActivity.this,
+                                                                            user_receiver.getToken(),
+                                                                            "You have a new message",
+                                                                            body);
+
+
+                                                                }
+                                                            });
+                                                }
+                                            }
+                                        });
+                            }
+
+
+                        }
+                    });
+                }
+
+            }}
+    public interface OnListItemClick {
+        void onClick(View view, int position);
+    }
 }

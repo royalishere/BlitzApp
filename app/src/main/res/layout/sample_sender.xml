@@ -61,6 +61,19 @@
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline2" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:background="@drawable/white_box"
+        android:padding="5dp"
+        android:id="@+id/senderImage"
+        android:layout_marginTop="8dp"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="20dp"
+        />
 </RelativeLayout>

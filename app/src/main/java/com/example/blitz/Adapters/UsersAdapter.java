@@ -55,21 +55,23 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
             public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
                 if(snapshot.hasChildren()) {
                     for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        String last_msg = dataSnapshot.child("message").getValue().toString();
-                        //decrypt last message
-                        try
-                        {
-                            last_msg = AESCrypt.decrypt(context.getString(R.string.key_encrypt),last_msg);
+                        if (dataSnapshot.child("type").getValue().toString().equals("text")) {
+                            String last_msg = dataSnapshot.child("message").getValue().toString();
+
+                            //decrypt last message
+                            try {
+                                last_msg = AESCrypt.decrypt(context.getString(R.string.key_encrypt), last_msg);
+                            } catch (Exception e) {
+                                throw new RuntimeException(e);
+                            }
+                            if (last_msg.length() > 20) {
+                                last_msg = last_msg.substring(0, 20) + "...";
+                            }
+                            holder.lastMessage.setText(last_msg);
                         }
-                        catch (Exception e)
-                        {
-                            throw new RuntimeException(e);
+                        else if(dataSnapshot.child("type").getValue().toString().equals("image")){
+                            holder.lastMessage.setText("Image");
                         }
-                        if(last_msg.length() > 20)
-                        {
-                            last_msg = last_msg.substring(0,20) + "...";
-                        }
-                        holder.lastMessage.setText(last_msg);
                     }
                 }
                 else {

@@ -90,11 +90,20 @@
         android:layout_marginBottom="5dp"
         android:orientation="horizontal">
 
+        <ImageView
+            android:id="@+id/btn_send_file"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/file"
+            android:layout_gravity="center"
+            android:tint="@color/indicator" />
+
         <EditText
             android:id="@+id/chat_editText"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginLeft="5dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             style="@style/rounded_editext1"
@@ -112,7 +121,8 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/send_icon"
-            android:tint="@color/indicator" />
+            android:tint="@color/indicator"
+            android:layout_marginRight="10dp"/>
 
     </LinearLayout>
 
