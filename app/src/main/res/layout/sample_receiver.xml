@@ -62,7 +62,12 @@
         android:layout_height="250dp"
         android:adjustViewBounds="true"
         android:scaleType="fitCenter"
+        android:padding="7dp"
 
         android:layout_marginLeft="20dp"
+        android:clickable="true"
+
+        android:src="@drawable/landscape_placeholder"
+
         />
 </RelativeLayout>
