@@ -23,11 +23,11 @@
 
 
         <TextView
+            android:padding="5dp"
             android:id="@+id/senderText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
-            android:layout_marginTop="3dp"
             android:layout_marginEnd="3dp"
             android:layout_marginBottom="3dp"
             android:inputType="text|textLongMessage|textMultiLine"
@@ -36,9 +36,11 @@
             android:text="mess"
             android:textAlignment="viewStart"
             android:textColor="@color/white"
+            android:textIsSelectable="true"
+            android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/senderTime"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="0.29"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
@@ -48,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintGuide_end="16dp" />
+            app:layout_constraintGuide_percent="0.84" />
 
         <TextView
             android:id="@+id/senderTime"
@@ -61,22 +63,43 @@
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/guideline2" />
-        
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <ImageView
-        android:background="@drawable/white_box"
-        android:padding="7dp"
-        android:id="@+id/senderImage"
-        android:layout_marginTop="8dp"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:adjustViewBounds="true"
-        android:scaleType="fitCenter"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:clickable="true"
+        android:orientation="horizontal">
 
-        android:src="@drawable/landscape_placeholder"
-        />
+        <ImageView
+            android:id="@+id/senderImage"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="20dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/white_box"
+            android:clickable="true"
+            android:padding="7dp"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/landscape_placeholder" />
+
+        <ImageView
+            android:id="@+id/senderImg_info"
+            android:padding="5dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-50dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="20dp"
+            android:clickable="true"
+            android:src="@drawable/info_icon" />
+
+    </LinearLayout>
+
 </RelativeLayout>
