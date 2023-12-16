@@ -1,5 +1,7 @@
 package com.example.blitz.Adapters;
 
+import static android.content.Intent.getIntent;
+import static android.provider.Settings.System.getString;
 import static androidx.core.content.ContextCompat.startActivity;
 
 import android.app.AlertDialog;
@@ -18,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,9 +30,11 @@ import com.example.blitz.Models.Message;
 import com.example.blitz.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.scottyab.aescrypt.AESCrypt;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -185,7 +190,8 @@ public class ChatAdapter extends RecyclerView.Adapter{
                 });
 
 
-            } else {
+            } else
+            {
                 //----------
                 //hide receiver text
                 ((ReceiverViewHolder) holder).recieverMsg.setVisibility(View.GONE);
@@ -219,6 +225,89 @@ public class ChatAdapter extends RecyclerView.Adapter{
             }
         }
 
+        //delete message
+        String senderId = FirebaseAuth.getInstance().getUid();
+        String receiverId = message.getuId();
+
+        String senderRoom = senderId + receiverId;
+        String receiverRoom = receiverId + senderId;
+        ((SenderViewHolder)holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (holder.getClass() == SenderViewHolder.class) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(((SenderViewHolder) holder).senderImage.getContext());
+                    builder.setTitle("Delete");
+                    builder.setMessage("Are you sure you want to delete this message?");
+                    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            database.getReference().child("chats").child(senderRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                @Override
+                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        Message message_db = ds.getValue(Message.class);
+                                        //decrypt message_db
+                                        String message_db_decrypt;
+                                        try {
+                                            message_db_decrypt = AESCrypt.decrypt("helloworld",message_db.getMessage());
+                                            if (message_db_decrypt.equals(message.getMessage())) {
+
+                                                String set_val= "this message was deleted";
+                                                //encrypt set_val
+                                                try{
+                                                    set_val = AESCrypt.encrypt("helloworld",set_val);
+                                                    ds.getRef().child("message").setValue(set_val);
+                                                } catch (Exception e) {}
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }
+                            });
+                            database.getReference().child("chats").child(receiverRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                                @Override
+                                public void onSuccess(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                                        Message message_db = ds.getValue(Message.class);
+                                        //decrypt message_db
+                                        String message_db_decrypt;
+                                        try {
+                                            message_db_decrypt = AESCrypt.decrypt("helloworld",message_db.getMessage());
+                                            if (message_db_decrypt.equals(message.getMessage())) {
+                                                String set_val= "this message was deleted";
+                                                //encrypt set_val
+                                                try{
+                                                    set_val = AESCrypt.encrypt("helloworld",set_val);
+                                                    ds.getRef().child("message").setValue(set_val);
+                                                } catch (Exception e) {}
+
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }
+                            });
+
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", null);
+                    builder.show();
+                }
+
+
+
+
+                return true;
+            }
+        });
+
+
+
 
     }
 
@@ -230,7 +319,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
 
     @Override
     public int getItemViewType(int position) {
-        if(messages.get(position).getuId().equals(FirebaseAuth.getInstance().getUid())) {
+        if(!messages.get(position).getuId().equals(FirebaseAuth.getInstance().getUid())) {
             return SENDER_VIEW_TYPE;
         } else {
             return RECEIVER_VIEW_TYPE;
