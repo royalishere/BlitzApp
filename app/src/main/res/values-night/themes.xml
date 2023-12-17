@@ -49,6 +49,10 @@
         <item name="android:background">#111111</item>
     </style>
 
+    <style name="colorBackground2">
+        <item name="android:background">#9F9F9F</item>
+    </style>
+
     <style name="rounded_editext1"
         parent="Widget.AppCompat.EditText">
         <item name="android:textColor">@color/white</item>

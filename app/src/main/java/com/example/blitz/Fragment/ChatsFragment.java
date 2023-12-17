@@ -94,23 +94,41 @@ public class ChatsFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             // get current user id
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            database.getReference().child("Users").child(uid).child("friendList").addValueEventListener(new ValueEventListener() {
+//            database.getReference().child("Users").child(uid).child("friendList").addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                    chatlist.clear();
+//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                        // for each key in friendList, get the user info
+//                        database.getReference().child("Users").child((String) dataSnapshot.getKey()).addValueEventListener(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                Users user = snapshot.getValue(Users.class);
+//                                user.setUserId(snapshot.getKey());
+//                                chatlist.add(user);
+//                                adapter.notifyDataSetChanged();
+//                            }
+//                            @Override
+//                            public void onCancelled(@NonNull DatabaseError error) {
+//                            }
+//                        });
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(@NonNull DatabaseError error) {
+//                }
+//            });
+
+            database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     chatlist.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        // for each key in friendList, get the user info
-                        database.getReference().child("Users").child((String) dataSnapshot.getKey()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Users user = snapshot.getValue(Users.class);
-                                chatlist.add(user);
-                                adapter.notifyDataSetChanged();
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
+                        Users user = dataSnapshot.getValue(Users.class);
+                        user.setUserId(dataSnapshot.getKey());
+                        chatlist.add(user);
+                        adapter.notifyDataSetChanged();
                     }
                 }
 

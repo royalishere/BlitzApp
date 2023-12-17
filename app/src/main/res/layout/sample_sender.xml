@@ -36,7 +36,6 @@
             android:text="mess"
             android:textAlignment="viewStart"
             android:textColor="@color/white"
-            android:textIsSelectable="true"
             android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/senderTime"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"

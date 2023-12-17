@@ -10,7 +10,7 @@
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:background="@color/grayBackground">
+        style="@style/colorBackground2">
 
         <ImageView
             android:id="@+id/imageView4"
@@ -25,6 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
+            android:textCursorDrawable="@null"
             android:ems="10"
             android:inputType="text" />
 

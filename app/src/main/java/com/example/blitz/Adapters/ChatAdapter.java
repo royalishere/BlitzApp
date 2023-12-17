@@ -231,7 +231,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
 
         String senderRoom = senderId + receiverId;
         String receiverRoom = receiverId + senderId;
-        ((SenderViewHolder)holder).itemView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 if (holder.getClass() == SenderViewHolder.class) {
