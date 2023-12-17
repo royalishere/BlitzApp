@@ -70,4 +70,20 @@
         android:src="@drawable/landscape_placeholder"
 
         />
+    <ImageView
+        android:background="@drawable/white_box"
+        android:id="@+id/receiverFile"
+        android:layout_marginTop="8dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:padding="7dp"
+
+        android:layout_marginLeft="20dp"
+        android:clickable="true"
+
+        android:src="@drawable/file"
+
+        />
 </RelativeLayout>

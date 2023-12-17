@@ -87,7 +87,43 @@
             android:src="@drawable/landscape_placeholder" />
 
         <ImageView
-            android:id="@+id/senderImg_info"
+            android:id="@+id/senderImg_del"
+            android:padding="5dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="bottom"
+            android:layout_marginLeft="-50dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="20dp"
+            android:clickable="true"
+            android:src="@drawable/info_icon"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/senderFile"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="20dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/white_box"
+            android:clickable="true"
+            android:padding="7dp"
+            android:scaleType="fitCenter"
+
+            android:src="@drawable/file" />
+
+        <ImageView
+            android:id="@+id/senderFile_del"
             android:padding="5dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
@@ -100,5 +136,6 @@
             android:src="@drawable/info_icon" />
 
     </LinearLayout>
+
 
 </RelativeLayout>
