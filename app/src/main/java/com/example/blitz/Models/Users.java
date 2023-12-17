@@ -1,8 +1,11 @@
 package com.example.blitz.Models;
 
+import java.util.List;
+
 public class Users {
 
     String profilePicture, userName, mail, password, userId, lastMessage, status, address, mobile, token;
+    List<String> friendsList;
 
     public Users(String profilePicture, String userName, String mail, String password, String userId, String lastMessage, String status, String address, String mobile,String token) {
         this.profilePicture = profilePicture;
@@ -115,4 +118,9 @@ public class Users {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public List<String> getFriendsList() {
+        return friendsList;
+    }
+
 }

@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.ContactsFragment" />
+    android:orientation="vertical"
+    tools:context=".Fragment.ContactsFragment">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        style="@style/colorBackground2">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            style="@style/colorHint1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@android:drawable/ic_menu_search"
+            app:tint="@color/white" />
+
+        <EditText
+            android:id="@+id/searchText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:textCursorDrawable="@null"
+            android:ems="10"
+            android:inputType="text" />
+
+    </TableRow>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/friendsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

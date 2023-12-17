@@ -16,7 +16,7 @@
 
     <style name="Base.Theme.Blitz" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/black</item>
+        <item name="colorPrimary">@color/darkGray</item>
         <item name="colorPrimaryVariant">@color/black</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
@@ -47,6 +47,10 @@
 
     <style name="colorBackground1">
         <item name="android:background">#111111</item>
+    </style>
+
+    <style name="colorBackground2">
+        <item name="android:background">#9F9F9F</item>
     </style>
 
     <style name="rounded_editext1"

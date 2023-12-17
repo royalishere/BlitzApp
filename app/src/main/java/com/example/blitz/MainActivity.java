@@ -1,7 +1,9 @@
 package com.example.blitz;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,15 +13,25 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.blitz.Adapters.FragmentsAdapter;
+import com.example.blitz.Models.Users;
 import com.example.blitz.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String NIGHT_MODE_KEY = "nightMode";
 
+    public static ArrayList<Users> allUsers = new ArrayList<>();
     ActivityMainBinding binding;
+
+
     FirebaseAuth auth;
     boolean isNightMode;
 
