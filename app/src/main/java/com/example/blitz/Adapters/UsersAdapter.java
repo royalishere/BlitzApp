@@ -71,18 +71,34 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
                             holder.lastMessage.setText(last_msg );
                         }
-                        else if(dataSnapshot.child("type").getValue().toString().equals("image")){
+                        else if(dataSnapshot.child("type").getValue().toString().equals("image") && dataSnapshot.child("message").getValue().toString().equals("UBiqi2OEkXIx8dLh2/I2HTYc04R42yIUpS/IwUGPwZg=")){
+
+                            holder.lastMessage.setText("This photo was deleted");
+
+                        }
+                        else if(dataSnapshot.child("type").getValue().toString().equals("image")&& !dataSnapshot.child("message").getValue().toString().equals("UBiqi2OEkXIx8dLh2/I2HTYc04R42yIUpS/IwUGPwZg=")){
 
                             holder.lastMessage.setText("Photo ");
                         }
-                        else if(dataSnapshot.child("type").getValue().toString().equals("pdf")){
+
+                        else if(dataSnapshot.child("type").getValue().toString().equals("pdf") && dataSnapshot.child("message").getValue().toString().equals("X3BahcMIGeJCX/ZJe03P745iTtxVRgThnYKO37QSFLs=")){
+
+                            holder.lastMessage.setText("This PDF file was deleted");
+                        }
+                        else if(dataSnapshot.child("type").getValue().toString().equals("pdf")&& !dataSnapshot.child("message").getValue().toString().equals("X3BahcMIGeJCX/ZJe03P745iTtxVRgThnYKO37QSFLs=")){
 
                             holder.lastMessage.setText("PDF File ");
                         }
-                        else if(dataSnapshot.child("type").getValue().toString().equals("docx")){
 
-                            holder.lastMessage.setText("Document File " );
+                        else if(dataSnapshot.child("type").getValue().toString().equals("docx")&& dataSnapshot.child("message").getValue().toString().equals("X3BahcMIGeJCX/ZJe03P745iTtxVRgThnYKO37QSFLs=")){
+
+                            holder.lastMessage.setText("This doc file was deleted " );
                         }
+                        else if(dataSnapshot.child("type").getValue().toString().equals("docx")&& !dataSnapshot.child("message").getValue().toString().equals("X3BahcMIGeJCX/ZJe03P745iTtxVRgThnYKO37QSFLs=")){
+
+                            holder.lastMessage.setText("DOC file" );
+                        }
+
                     }
                 }
                 else {
