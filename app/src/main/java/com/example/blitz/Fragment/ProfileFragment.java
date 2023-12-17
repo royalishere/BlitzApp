@@ -527,7 +527,7 @@ public class ProfileFragment extends Fragment {
                         } else {
                             HashMap<String, Object> obj = new HashMap<>();
                             obj.put("userName", username);
-                            obj.put("about", status);
+                            obj.put("status", status);
                             obj.put("address", address);
                             obj.put("mobile", mobile);
                             database.getReference().child("Users").child(FirebaseAuth.getInstance().getUid())

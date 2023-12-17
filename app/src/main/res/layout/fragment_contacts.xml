@@ -25,14 +25,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:textCursorDrawable="@null"
             android:ems="10"
-            android:inputType="text" />
+            android:hint="Search via your friend's email, name ..."
+            android:inputType="text"
+            android:textCursorDrawable="@null"
+            android:textSize="16sp" />
 
     </TableRow>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friendsRecyclerView"
+        android:id="@+id/contactRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

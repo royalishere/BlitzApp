@@ -3,7 +3,6 @@ package com.example.blitz.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -119,7 +118,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 super(itemView);
                 image = itemView.findViewById(R.id.profile_image);
                 userName = itemView.findViewById(R.id.username);
-                lastMessage = itemView.findViewById(R.id.u_status);
+                lastMessage = itemView.findViewById(R.id.last_msg);
             }
     }
 }
