@@ -291,8 +291,6 @@ public class GroupChatApdapter extends RecyclerView.Adapter {
         }
 
         //delete message
-        String senderId = FirebaseAuth.getInstance().getUid();
-        //delete message
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -303,7 +301,7 @@ public class GroupChatApdapter extends RecyclerView.Adapter {
                     builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            database.getReference().child("Groups").child(groupID).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            database.getReference().child("Groups").child(groupID).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
                                 public void onSuccess(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -350,7 +348,7 @@ public class GroupChatApdapter extends RecyclerView.Adapter {
                     builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            database.getReference().child("chats").child(groupID).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            database.getReference().child("Groups").child(groupID).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
                                 public void onSuccess(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -390,7 +388,7 @@ public class GroupChatApdapter extends RecyclerView.Adapter {
                     builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            database.getReference().child("chats").child(groupID).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                            database.getReference().child("Groups").child(groupID).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                                 @Override
                                 public void onSuccess(DataSnapshot dataSnapshot) {
                                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
