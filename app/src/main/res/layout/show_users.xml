@@ -30,18 +30,17 @@
             android:layout_height="wrap_content"
             android:paddingLeft="12dp"
             android:paddingTop="10dp"
-            android:text="TextView"
             android:textSize="16dp"
             style="@style/colorHint1"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/u_status"
+            android:id="@+id/last_msg"
+            style="@style/colorHint1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="12dp"
             android:paddingTop="5dp"
-            style="@style/colorHint1"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

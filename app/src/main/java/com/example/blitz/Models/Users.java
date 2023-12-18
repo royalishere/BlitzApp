@@ -1,12 +1,12 @@
 package com.example.blitz.Models;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Users {
 
     String profilePicture, userName, mail, password, userId, lastMessage, status, address, mobile, token;
-    List<String> friendsList;
-
+    Map<String, Boolean> friendList = new HashMap<>();
     public Users(String profilePicture, String userName, String mail, String password, String userId, String lastMessage, String status, String address, String mobile,String token) {
         this.profilePicture = profilePicture;
         this.userName = userName;
@@ -18,17 +18,19 @@ public class Users {
         this.address = address;
         this.mobile = mobile;
         this.token = token;
+        this.friendList = friendList;
     }
 
     // Empty Constructor
     public Users() {
     }
 
-    public Users(String userName, String mail, String password, String profilePicture) {
+    public Users(String userName, String mail, String password, String profilePicture, Map<String, Boolean> friendList) {
         this.userName = userName;
         this.mail = mail;
         this.password = password;
         this.profilePicture = profilePicture;
+        this.friendList = friendList;
     }
 
     // Sign Up Constructor
@@ -119,8 +121,15 @@ public class Users {
         this.token = token;
     }
 
-    public List<String> getFriendsList() {
-        return friendsList;
+    public Map<String, Boolean> getFriendList() {
+        return friendList;
     }
 
+    public void addFriend(String friendId) {
+        friendList.put(friendId, true);
+    }
+
+    public void removeFriend(String friendId) {
+        friendList.remove(friendId);
+    }
 }

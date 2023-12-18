@@ -94,6 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                     // Get the current user id
                                     String id = task.getResult().getUser().getUid();
+                                    user.addFriend(id);
                                     database.getReference().child("Users").child(id).setValue(user);
 
                                     FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
@@ -106,6 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                                     // sign in with the new user and go to main activity
                                     Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                     startActivity(intent);
 
 

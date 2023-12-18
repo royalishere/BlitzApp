@@ -49,6 +49,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -276,18 +277,25 @@ public class SignInActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     FirebaseUser user = auth.getCurrentUser();
-
-                    Users users = new Users();
-                    users.setUserId(user.getUid());
-                    users.setUserName(user.getDisplayName());
-                    users.setProfilePicture(user.getPhotoUrl().toString());
-                    users.setMail(user.getEmail());
-                    database.getReference().child("Users").child(user.getUid()).setValue(users);
-
-                    FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
+                    // check if user is already in database
+                    database.getReference().child("Users").child(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
-                        public void onSuccess(String s) {
-                            database.getReference().child("Users").child(user.getUid()).child("token").setValue(s);
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            if(!dataSnapshot.exists()){
+                                Users users = new Users();
+                                users.setUserId(user.getUid());
+                                users.setUserName(user.getDisplayName());
+                                users.setProfilePicture(user.getPhotoUrl().toString());
+                                users.setMail(user.getEmail());
+                                users.addFriend(user.getUid());
+                                database.getReference().child("Users").child(user.getUid()).setValue(users);
+                            }
+                            FirebaseMessaging.getInstance().getToken().addOnSuccessListener(new OnSuccessListener<String>() {
+                                @Override
+                                public void onSuccess(String s) {
+                                    database.getReference().child("Users").child(user.getUid()).child("token").setValue(s);
+                                }
+                            });
                         }
                     });
 

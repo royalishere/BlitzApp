@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -14,12 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.blitz.Adapters.GroupsAdapter;
 import com.example.blitz.Adapters.UsersAdapter;
-import com.example.blitz.MainActivity;
+import com.example.blitz.Models.Groups;
 import com.example.blitz.Models.Users;
 import com.example.blitz.R;
 import com.example.blitz.databinding.FragmentChatsBinding;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ChatsFragment extends Fragment {
 
@@ -34,11 +35,13 @@ public class ChatsFragment extends Fragment {
         // Required empty public constructor
     }
     FragmentChatsBinding binding;
-    ArrayList<Users> chatlist = new ArrayList<>();
-    ArrayList<Users> grouplist = new ArrayList<>();
+    public static ArrayList<Users> chatlist = new ArrayList<>();
+    public ArrayList<Groups> grouplist = new ArrayList<>();
+
     FirebaseDatabase database;
     Button chat_btn, group_btn;
     UsersAdapter adapter;
+    GroupsAdapter groupAdapter;
 
 
     @Override
@@ -47,6 +50,7 @@ public class ChatsFragment extends Fragment {
         binding = FragmentChatsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
         new FetchUsersFromFirebase().execute();
+        new FetchGroupFromFirebase().execute();
 
         chat_btn = binding.chatBtn;
         group_btn = binding.groupchatBtn;
@@ -76,8 +80,8 @@ public class ChatsFragment extends Fragment {
                 group_btn.setBackgroundTintList(getResources().getColorStateList(R.color.grayBubble));
                 chat_btn.setTextColor(getResources().getColor(R.color.black));
                 group_btn.setTextColor(getResources().getColor(R.color.white));
-                adapter = new UsersAdapter(getContext(), grouplist);
-                binding.chatRecyclerView.setAdapter(adapter);
+                groupAdapter = new GroupsAdapter(getContext(), grouplist);
+                binding.chatRecyclerView.setAdapter(groupAdapter);
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                 binding.chatRecyclerView.setLayoutManager(layoutManager);
@@ -94,44 +98,58 @@ public class ChatsFragment extends Fragment {
         protected Void doInBackground(Void... voids) {
             // get current user id
             String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//            database.getReference().child("Users").child(uid).child("friendList").addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                    chatlist.clear();
-//                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                        // for each key in friendList, get the user info
-//                        database.getReference().child("Users").child((String) dataSnapshot.getKey()).addValueEventListener(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                Users user = snapshot.getValue(Users.class);
-//                                user.setUserId(snapshot.getKey());
-//                                chatlist.add(user);
-//                                adapter.notifyDataSetChanged();
-//                            }
-//                            @Override
-//                            public void onCancelled(@NonNull DatabaseError error) {
-//                            }
-//                        });
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(@NonNull DatabaseError error) {
-//                }
-//            });
-
+            Set<String> friendList = new HashSet<>();
+            database.getReference().child("Users").child(uid).child("friendList").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    friendList.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        friendList.add(dataSnapshot.getKey());
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
             database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     chatlist.clear();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Users user = dataSnapshot.getValue(Users.class);
-                        user.setUserId(dataSnapshot.getKey());
-                        chatlist.add(user);
-                        adapter.notifyDataSetChanged();
+                        Users users = dataSnapshot.getValue(Users.class);
+                        users.setUserId(dataSnapshot.getKey());
+                        if (friendList.contains(users.getUserId())) {
+                            chatlist.add(users);
+                            adapter.notifyDataSetChanged();
+                        }
                     }
                 }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                }
+            });
+            return null;
+        }
+    }
 
+    // do in background
+    private class FetchGroupFromFirebase extends AsyncTask<Void, Void ,Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.getReference().child("Groups").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    grouplist.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Groups group = dataSnapshot.getValue(Groups.class);
+                        group.setGroupId(dataSnapshot.getKey());
+                        grouplist.add(group);
+                        // if the current adapter is group adapter, notify the adapter
+                        if (binding.chatRecyclerView.getAdapter() instanceof GroupsAdapter) {
+                            groupAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }

@@ -6,8 +6,8 @@
         android:title="Settings"
         />
     <item
-        android:id="@+id/logout"
-        android:title="Log Out"
+        android:id="@+id/createGroup"
+        android:title="Create Group"
         />
     <item
         android:id="@+id/nightMode"

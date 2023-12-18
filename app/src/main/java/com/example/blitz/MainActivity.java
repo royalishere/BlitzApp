@@ -1,5 +1,6 @@
 package com.example.blitz;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,7 +8,10 @@ import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
@@ -22,11 +26,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String NIGHT_MODE_KEY = "nightMode";
+
+    FirebaseDatabase database;
 
     public static ArrayList<Users> allUsers = new ArrayList<>();
     ActivityMainBinding binding;
@@ -91,7 +98,55 @@ public class MainActivity extends AppCompatActivity {
 
             recreate(); // Recreate the activity to apply the night mode immediately
         }
+        else if (item.getItemId() == R.id.createGroup)
+        {
+            RequestNewGroup();
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void RequestNewGroup() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this, R.style.AlertDialog);
+        builder.setTitle("Enter Group Name: ");
+
+        final EditText groupNameField = new EditText(MainActivity.this);
+        groupNameField.setHint("e.g. Blitz Devs");
+        groupNameField.setTextSize(16);
+        builder.setView(groupNameField);
+        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                String groupName = groupNameField.getText().toString();
+
+                if (groupName.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter group name", Toast.LENGTH_SHORT).show();
+                }
+                else
+                {
+                    CreateNewGroup(groupName);
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel(); // Close the dialog
+            }
+        });
+        builder.show();
+    }
+
+    private void CreateNewGroup(String groupName) {
+        database = FirebaseDatabase.getInstance();
+        HashMap<String, Object> group = new HashMap<>();
+        group.put("groupName", groupName);
+        group.put("members", null);
+        database.getReference().child("Groups").push().setValue(group)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Toast.makeText(MainActivity.this, groupName + " group is created successfully", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }
