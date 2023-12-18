@@ -3,11 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
-
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission." />
-
 
     <application
         android:allowBackup="true"
@@ -20,39 +17,36 @@
         android:theme="@style/Base.Theme.Blitz"
         tools:targetApi="31">
         <activity
+            android:name=".GroupChatDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".Change_info"
             android:exported="false" />
         <activity
             android:name=".SearchActivity"
             android:exported="false"
-            android:label="@string/title_activity_search"
-             />
-
+            android:label="@string/title_activity_search" />
         <activity
             android:name=".SignInActivity"
             android:exported="true"
-            android:noHistory="true"
-            >
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".SignUpActivity"
             android:exported="false"
-            android:noHistory="true"></activity>
+            android:noHistory="true" />
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:label="Blitz Chat App"
-            />
+            android:label="Blitz Chat App" />
         <activity
             android:name=".ChatDetailActivity"
             android:exported="false" />
-
-
-
 
         <service
             android:name=".PushNotificationService"
@@ -62,6 +56,5 @@
             </intent-filter>
         </service>
     </application>
-
 
 </manifest>

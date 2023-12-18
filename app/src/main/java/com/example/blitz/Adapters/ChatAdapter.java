@@ -532,7 +532,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
         }
     }
 
-    public class SenderViewHolder extends ReceiverViewHolder {
+    public class SenderViewHolder extends RecyclerView.ViewHolder {
         TextView senderMsg, senderTime;
         ImageView senderImage, senderFile,senderFile_del,senderImage_del;
         public SenderViewHolder(@NonNull View itemView) {
@@ -545,10 +545,4 @@ public class ChatAdapter extends RecyclerView.Adapter{
             senderImage_del = itemView.findViewById(R.id.senderImg_del);
         }
     }
-
-
-
-
-
-
 }

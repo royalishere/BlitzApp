@@ -4,25 +4,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 
-import com.example.blitz.Adapters.GroupAdapter;
+import com.example.blitz.Adapters.GroupsAdapter;
 import com.example.blitz.Adapters.UsersAdapter;
-import com.example.blitz.MainActivity;
+import com.example.blitz.Models.Groups;
 import com.example.blitz.Models.Users;
 import com.example.blitz.R;
 import com.example.blitz.databinding.FragmentChatsBinding;
-import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,9 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 public class ChatsFragment extends Fragment {
@@ -42,12 +36,12 @@ public class ChatsFragment extends Fragment {
     }
     FragmentChatsBinding binding;
     public static ArrayList<Users> chatlist = new ArrayList<>();
-    public ArrayList<String> grouplist = new ArrayList<>();
+    public ArrayList<Groups> grouplist = new ArrayList<>();
 
     FirebaseDatabase database;
     Button chat_btn, group_btn;
     UsersAdapter adapter;
-    GroupAdapter groupAdapter;
+    GroupsAdapter groupAdapter;
 
 
     @Override
@@ -86,7 +80,7 @@ public class ChatsFragment extends Fragment {
                 group_btn.setBackgroundTintList(getResources().getColorStateList(R.color.grayBubble));
                 chat_btn.setTextColor(getResources().getColor(R.color.black));
                 group_btn.setTextColor(getResources().getColor(R.color.white));
-                groupAdapter = new GroupAdapter(getContext(), grouplist);
+                groupAdapter = new GroupsAdapter(getContext(), grouplist);
                 binding.chatRecyclerView.setAdapter(groupAdapter);
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -146,11 +140,16 @@ public class ChatsFragment extends Fragment {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     grouplist.clear();
-                    Set<String> set = new HashSet<>();
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        set.add(dataSnapshot.getKey());
+                        Groups group = dataSnapshot.getValue(Groups.class);
+                        group.setGroupId(dataSnapshot.getKey());
+                        grouplist.add(group);
+                        // if the current adapter is group adapter, notify the adapter
+                        if (binding.chatRecyclerView.getAdapter() instanceof GroupsAdapter) {
+                            groupAdapter.notifyDataSetChanged();
+                        }
                     }
-                    grouplist.addAll(set);}
+                }
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                 }

@@ -343,8 +343,6 @@ public class ChatDetailActivity extends AppCompatActivity {
                 if (dialog.getWindow() != null) {
                     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 }
-
-
             };
         });
 

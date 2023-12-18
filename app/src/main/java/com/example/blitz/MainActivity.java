@@ -26,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -138,7 +139,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void CreateNewGroup(String groupName) {
         database = FirebaseDatabase.getInstance();
-        database.getReference().child("Groups").child(groupName).setValue("")
+        HashMap<String, Object> group = new HashMap<>();
+        group.put("groupName", groupName);
+        group.put("members", null);
+        database.getReference().child("Groups").push().setValue(group)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(MainActivity.this, groupName + " group is created successfully", Toast.LENGTH_SHORT).show();

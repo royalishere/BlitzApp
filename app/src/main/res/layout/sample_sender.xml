@@ -6,68 +6,88 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <TextView
+        android:id="@+id/sendername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="7dp"
-        android:layout_marginRight="7dp"
-        android:background="@drawable/bg_sender"
-        android:maxWidth="300dp"
-        android:maxHeight="400dp"
-        android:minWidth="100dp"
-        android:paddingLeft="3dp">
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="Hoàng Gia Trương Cao"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
 
-
-        <TextView
-            android:padding="5dp"
-            android:id="@+id/senderText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:layout_marginEnd="3dp"
-            android:layout_marginBottom="3dp"
-            android:inputType="text|textLongMessage|textMultiLine"
-            android:maxWidth="270dp"
-            android:minWidth="50dp"
-            android:text="mess"
-            android:textAlignment="viewStart"
-            android:textColor="@color/white"
-            android:textSize="15dp"
-            app:layout_constraintBottom_toTopOf="@+id/senderTime"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.84" />
-
-        <TextView
-            android:id="@+id/senderTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="4dp"
-            android:text="01/01/23 03:30"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/sendername"
+        android:layout_alignParentRight="true"
+        android:orientation="horizontal">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/sendername"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="7dp"
+            android:background="@drawable/bg_sender"
+            android:maxWidth="300dp"
+            android:maxHeight="400dp"
+            android:minWidth="100dp"
+            android:paddingStart="3dp">
+
+
+            <TextView
+                android:id="@+id/senderText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="3dp"
+                android:inputType="text|textLongMessage|textMultiLine"
+                android:maxWidth="270dp"
+                android:minWidth="50dp"
+                android:padding="5dp"
+                android:text="mess"
+                android:textAlignment="viewStart"
+                android:textColor="@color/white"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toTopOf="@+id/senderTime"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="16dp" />
+
+            <TextView
+                android:id="@+id/senderTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:layout_marginBottom="4dp"
+                android:text="01/01/23 03:30"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/guideline2" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/sendername"
         android:layout_alignParentRight="true"
         android:orientation="horizontal">
 
@@ -76,34 +96,35 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:adjustViewBounds="true"
             android:background="@drawable/white_box"
             android:clickable="true"
             android:padding="7dp"
-            android:scaleType="fitCenter"
 
+            android:scaleType="fitCenter"
             android:src="@drawable/landscape_placeholder" />
 
         <ImageView
             android:id="@+id/senderImg_del"
-            android:padding="5dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="-50dp"
-            android:layout_marginBottom="5dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
             android:clickable="true"
-            android:src="@drawable/info_icon"
-            />
+            android:padding="5dp"
+            android:src="@drawable/info_icon" />
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/sendername"
         android:layout_alignParentRight="true"
         android:orientation="horizontal">
 
@@ -112,27 +133,27 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="20dp"
             android:adjustViewBounds="true"
             android:background="@drawable/white_box"
             android:clickable="true"
             android:padding="7dp"
-            android:scaleType="fitCenter"
 
+            android:scaleType="fitCenter"
             android:src="@drawable/file" />
 
         <ImageView
             android:id="@+id/senderFile_del"
-            android:padding="5dp"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="bottom"
             android:layout_marginLeft="-50dp"
-            android:layout_marginBottom="5dp"
             android:layout_marginTop="8dp"
             android:layout_marginRight="20dp"
+            android:layout_marginBottom="5dp"
             android:clickable="true"
+            android:padding="5dp"
             android:src="@drawable/info_icon" />
 
     </LinearLayout>
