@@ -61,4 +61,13 @@
         android:layout_marginRight="10dp"
         android:src="@drawable/plus_svgrepo_com" />
 
+    <ImageView
+        android:id="@+id/unfr_btn"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp"
+        android:src="@drawable/minus"
+        android:visibility="gone" />
+
 </LinearLayout>

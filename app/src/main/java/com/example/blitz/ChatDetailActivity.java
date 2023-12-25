@@ -158,6 +158,10 @@ public class ChatDetailActivity extends AppCompatActivity {
                         messages.clear();
                         for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             Message message = snapshot1.getValue(Message.class);
+                            if(senderId.equals(receiverId))
+                            {
+                                message.setuId("myself");
+                            }
                             //----------
                             if (message.getType().equals("text")) {//decrypt message
                                 String messageTxt = message.getMessage();
@@ -167,20 +171,12 @@ public class ChatDetailActivity extends AppCompatActivity {
                                 } catch (Exception e) {
                                     throw new RuntimeException(e);
                                 }
-                                messages.add(message);
                             }
-                            else if (message.getType().equals("image")) {
-                                messages.add(message);
-                            }
-                            else if (message.getType().equals("pdf")) {
-                                messages.add(message);
-                            }
-                            else if (message.getType().equals("docx")) {
-                                messages.add(message);
-                            }
-
+                            messages.add(message);
                         }
                         adapter.notifyDataSetChanged();
+                        binding.chatRecyclerView.setAdapter(adapter);
+                        binding.chatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
                     }
 
                     @Override

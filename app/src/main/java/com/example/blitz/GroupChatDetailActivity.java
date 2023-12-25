@@ -94,13 +94,14 @@ public class GroupChatDetailActivity extends AppCompatActivity {
         // get messages
         final ArrayList<GroupMessage> messages = new ArrayList<>();
         final GroupChatApdapter adapter = new GroupChatApdapter(messages, this);
-        binding.chatRecyclerView.setAdapter(adapter);
+        binding.groupchatRecyclerView.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        binding.chatRecyclerView.setLayoutManager(layoutManager);
-
+        binding.groupchatRecyclerView.setLayoutManager(layoutManager);
+        dialog.show();
         database.getReference().child("Groups").child(groupId).child("Messages").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int messageCount = messages.size();
                 messages.clear();
                 for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     GroupMessage message = snapshot1.getValue(GroupMessage.class);
@@ -113,20 +114,12 @@ public class GroupChatDetailActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             throw new RuntimeException(e);
                         }
-                        messages.add(message);
                     }
-                    else if (message.getType().equals("image")) {
-                        messages.add(message);
-                    }
-                    else if (message.getType().equals("pdf")) {
-                        messages.add(message);
-                    }
-                    else if (message.getType().equals("docx")) {
-                        messages.add(message);
-                    }
-
+                    messages.add(message);
                 }
                 adapter.notifyDataSetChanged();
+                binding.groupchatRecyclerView.setAdapter(adapter);
+                binding.groupchatRecyclerView.scrollToPosition(adapter.getItemCount() - 1);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
