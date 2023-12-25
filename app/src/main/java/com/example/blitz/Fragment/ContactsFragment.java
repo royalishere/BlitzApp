@@ -1,5 +1,6 @@
 package com.example.blitz.Fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -20,16 +21,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ContactsFragment extends Fragment {
-    public ContactsFragment() {
-    }
+    public ContactsFragment() {}
 
-    FragmentContactsBinding binding;
+    public static FragmentContactsBinding binding;
     FirebaseDatabase database;
     ContactAdapter adapter;
-    ArrayList<Users> friendList = new ArrayList<>();
-    ArrayList<Users> allUsers = new ArrayList<>();
+    public static Set<String> friendList = new HashSet<>();
+    ArrayList<Users> usersList = new ArrayList<>();
     FirebaseAuth auth;
 
     @Override
@@ -38,16 +40,16 @@ public class ContactsFragment extends Fragment {
         binding = FragmentContactsBinding.inflate(inflater, container, false);
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
+        new fetchFriendList().execute();
 
         binding.searchText.setOnEditorActionListener((v, actionId, event) -> {
             String searchText = binding.searchText.getText().toString();
-            if (actionId == 6)
+            if (actionId == 6) // "Done" button
             {
                 binding.searchText.clearFocus();
                 if (searchText.isEmpty())
                 {
-                    friendList.clear();
-                    adapter = new ContactAdapter(friendList, getContext());
+                    adapter = new ContactAdapter(new ArrayList<>(), getContext());
                     binding.contactRecyclerView.setAdapter(adapter);
                 }
                 else if(searchText.equals("@all"))
@@ -55,32 +57,70 @@ public class ContactsFragment extends Fragment {
                     database.getReference().child("Users").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            allUsers.clear();
+                            usersList.clear();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren())
                             {
+                                if (dataSnapshot.getKey().equals(auth.getCurrentUser().getUid())) continue;
                                 Users user = dataSnapshot.getValue(Users.class);
                                 user.setUserId(dataSnapshot.getKey());
-                                allUsers.add(user);
+                                usersList.add(user);
                             }
-                            adapter = new ContactAdapter(allUsers, getContext());
+                            adapter = new ContactAdapter(usersList, getContext());
                             binding.contactRecyclerView.setAdapter(adapter);
                         }
 
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
+                        public void onCancelled(@NonNull DatabaseError error) {}
                     });
+                }
+                else
+                {
+                    database.getReference().child("Users").orderByChild("userName").startAt(searchText).endAt(searchText+"\uf8ff").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            usersList.clear();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                            {
+                                if (dataSnapshot.getKey().equals(auth.getCurrentUser().getUid())) continue;
+                                Users user = dataSnapshot.getValue(Users.class);
+                                user.setUserId(dataSnapshot.getKey());
+                                usersList.add(user);
+                            }
+                            adapter = new ContactAdapter(usersList, getContext());
+                            binding.contactRecyclerView.setAdapter(adapter);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
+
                 }
             }
             return false;
         });
-        adapter = new ContactAdapter(allUsers, getContext());
-        binding.contactRecyclerView.setAdapter(adapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         binding.contactRecyclerView.setLayoutManager(layoutManager);
         return binding.getRoot();
     }
 
+    private class fetchFriendList extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+            String uid = auth.getCurrentUser().getUid();
+            database.getReference().child("Users").child(uid).child("friendList").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    friendList.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                    {
+                        friendList.add(dataSnapshot.getKey());
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {}
+            });
+            return null;
+        }
+    }
 }
