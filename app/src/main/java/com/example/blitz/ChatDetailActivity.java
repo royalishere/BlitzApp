@@ -577,4 +577,24 @@ public class ChatDetailActivity extends AppCompatActivity {
     public interface OnListItemClick {
         void onClick(View view, int position);
     }
+
+//    private void DisplayLastSeen() {
+//        database.getReference().child("Users").child(user_sender.getUserId()).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                if (snapshot.child("userState").child("state").getValue().toString().equals("online")) {
+////                    binding.lastMessage.setText("online");
+//                    user
+//                } else {
+//                    long last_seen = Long.parseLong(snapshot.child("lastSeen").getValue().toString());
+//                    String lastSeen = TimeAgo.getTimeAgo(last_seen, getApplicationContext());
+//                    binding.lastSeen.setText(lastSeen);
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//            }
+//        });
+//    }
 }
