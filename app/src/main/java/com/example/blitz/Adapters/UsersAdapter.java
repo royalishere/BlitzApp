@@ -45,6 +45,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     public void onBindViewHolder(@androidx.annotation.NonNull ViewHolder holder, int position) {
         Users users = list.get(position);
         Picasso.get().load(users.getProfilePicture()).placeholder(R.drawable.hacker).into(holder.image);
+
         holder.userName.setText(users.getUserName());
 
         // get last message
@@ -98,6 +99,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                             holder.lastMessage.setText("DOC file" );
                         }
 
+                        if(dataSnapshot.child("userState").hasChild("state")) {
+                            String state = dataSnapshot.child("userState").child("state").getValue().toString();
+                            String time = dataSnapshot.child("userState").child("time").getValue().toString();
+                            String date = dataSnapshot.child("userState").child("date").getValue().toString();
+
+                            if (state.equals("online")) {
+                                holder.status.setText("online");
+                            } else if (state.equals("offline")) {
+                                holder.status.setText("Last Seen: " + date + " " + time);
+                            }
+                        }
+
                     }
                 }
                 else {
@@ -129,12 +142,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         ImageView image;
-        TextView userName, lastMessage;
+        TextView userName, lastMessage, status;
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 image = itemView.findViewById(R.id.profile_image);
                 userName = itemView.findViewById(R.id.username);
                 lastMessage = itemView.findViewById(R.id.last_msg);
+                status = itemView.findViewById(R.id.status);
             }
     }
 }

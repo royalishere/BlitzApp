@@ -68,7 +68,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView contactImage, addFriend, unFriend;
+        ImageView contactImage, addFriend, unFriend, onlineIcon;
         TextView contactName, contactStatus, contactMobile;
 
         public ViewHolder(@NonNull View itemView) {
@@ -79,6 +79,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
             contactMobile = itemView.findViewById(R.id.contact_mobile);
             addFriend = itemView.findViewById(R.id.addfr_btn);
             unFriend = itemView.findViewById(R.id.unfr_btn);
+            onlineIcon = itemView.findViewById(R.id.user_online_status);
         }
 
         public void handleAddFriend(String uid) {
