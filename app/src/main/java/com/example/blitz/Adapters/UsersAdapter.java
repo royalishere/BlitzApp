@@ -132,9 +132,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
                     if(state.equals("online")) {
                         holder.status.setText("Online");
+                        holder.status.setTextColor(context.getResources().getColor(R.color.status_background));
                     }
                     else if(state.equals("offline")) {
-                        holder.status.setText("Last Seen: " + date + " " + time);
+                        holder.status.setText("Last visited: " + date + " " + time);
+                        holder.status.setTextColor(context.getResources().getColor(R.color.black));
                     }
                     holder.status.setVisibility(View.VISIBLE);
                 }

@@ -1,9 +1,12 @@
 package com.example.blitz;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +17,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
@@ -25,6 +30,8 @@ import com.example.blitz.Fragment.ContactsFragment;
 import com.example.blitz.Models.Users;
 import com.example.blitz.databinding.ActivityMainBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
@@ -37,13 +44,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String NIGHT_MODE_KEY = "nightMode";
 
-    static FirebaseDatabase database;
+    FirebaseDatabase database;
 
     public static ArrayList<Users> allUsers = new ArrayList<>();
     ActivityMainBinding binding;
 
 
-    static FirebaseAuth auth;
+    FirebaseAuth auth;
     boolean isNightMode;
 
     @Override
@@ -82,34 +89,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        if(auth.getCurrentUser() == null)
-        {
-            finish();
-        }
-        else
-        {
-            updateUserStatus("online");
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if(auth.getCurrentUser() != null)
-        {
-            updateUserStatus("offline");
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if(auth.getCurrentUser() != null)
-        {
-            updateUserStatus("offline");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            registerActivityLifecycleCallbacks(new MyActivityLifecycleCallbacks());
         }
     }
 
@@ -232,8 +213,45 @@ public class MainActivity extends AppCompatActivity {
         onlineStateMap.put("date", saveCurrentDate);
         onlineStateMap.put("state", state);
 
-        database = FirebaseDatabase.getInstance();
-        database.getReference().child("Users").child(auth.getUid()).child("userState")
-                .updateChildren(onlineStateMap);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        ref.child("userState").setValue(onlineStateMap);
+    }
+
+    private class MyActivityLifecycleCallbacks implements Application.ActivityLifecycleCallbacks {
+
+        @Override
+        public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+            updateUserStatus("online");
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+            if (activity.isFinishing()) {
+                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                if (currentUser != null) {
+                    updateUserStatus("offline");
+                }
+            }
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {}
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                unregisterActivityLifecycleCallbacks(this);
+            }
+        }
     }
 }
