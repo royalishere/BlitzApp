@@ -48,17 +48,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.contactMobile.setText(user.getMobile());
 
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUserId());
-        ref.child("userState").addListenerForSingleValueEvent(new ValueEventListener() {
+        ref.child("userState").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){
-                    String state = snapshot.getValue().toString();
+                    String state = snapshot.child("state").getValue().toString();
                     if (state.equals("online")) {
                         holder.onlineIcon.setVisibility(View.VISIBLE);
                     }
-                    else {
-                        holder.onlineIcon.setVisibility(View.GONE);
-                    }
+                } else {
+                    holder.onlineIcon.setVisibility(View.GONE);
                 }
             }
             @Override
