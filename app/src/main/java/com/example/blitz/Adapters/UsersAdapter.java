@@ -105,12 +105,11 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                             String date = dataSnapshot.child("userState").child("date").getValue().toString();
 
                             if (state.equals("online")) {
-                                holder.status.setText("online");
+                                holder.status.setText("Online");
                             } else if (state.equals("offline")) {
                                 holder.status.setText("Last Seen: " + date + " " + time);
                             }
                         }
-
                     }
                 }
                 else {
