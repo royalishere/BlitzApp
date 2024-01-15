@@ -12,8 +12,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/profile_image"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="60dp"
+        android:layout_height="75dp"
         android:layout_marginLeft="5dp"
         android:src="@drawable/hacker"
         app:civ_border_color="#FF000000"
@@ -45,9 +45,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="12dp"
-                android:paddingTop="5dp"
-                android:textSize="14sp"
-                />
+                android:paddingTop="3dp"
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/status"
@@ -55,9 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="12dp"
-                android:paddingTop="5dp"
-                android:textSize="14sp"
-                />
+                android:textSize="12sp"
+                android:textStyle="bold|italic" />
 
         </LinearLayout>
 

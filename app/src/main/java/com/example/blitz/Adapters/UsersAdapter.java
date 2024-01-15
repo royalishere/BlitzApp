@@ -98,18 +98,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
 
                             holder.lastMessage.setText("DOC file" );
                         }
-
-                        if(dataSnapshot.child("userState").hasChild("state")) {
-                            String state = dataSnapshot.child("userState").child("state").getValue().toString();
-                            String time = dataSnapshot.child("userState").child("time").getValue().toString();
-                            String date = dataSnapshot.child("userState").child("date").getValue().toString();
-
-                            if (state.equals("online")) {
-                                holder.status.setText("Online");
-                            } else if (state.equals("offline")) {
-                                holder.status.setText("Last Seen: " + date + " " + time);
-                            }
-                        }
                     }
                 }
                 else {
@@ -129,6 +117,32 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                 intent.putExtra("profilePicture", users.getProfilePicture());
                 intent.putExtra("userName", users.getUserName());
                 context.startActivity(intent);
+            }
+        });
+
+        // check if user is online or offline
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(users.getUserId());
+        userRef.child("userState").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@androidx.annotation.NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()) {
+                    String state = snapshot.child("state").getValue().toString();
+                    String date = snapshot.child("date").getValue().toString();
+                    String time = snapshot.child("time").getValue().toString();
+
+                    if(state.equals("online")) {
+                        holder.status.setText("Online");
+                    }
+                    else if(state.equals("offline")) {
+                        holder.status.setText("Last Seen: " + date + " " + time);
+                    }
+                    holder.status.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@androidx.annotation.NonNull DatabaseError error) {
+
             }
         });
     }

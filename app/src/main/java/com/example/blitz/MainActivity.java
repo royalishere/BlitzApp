@@ -37,13 +37,13 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String NIGHT_MODE_KEY = "nightMode";
 
-    FirebaseDatabase database;
+    static FirebaseDatabase database;
 
     public static ArrayList<Users> allUsers = new ArrayList<>();
     ActivityMainBinding binding;
 
 
-    FirebaseAuth auth;
+    static FirebaseAuth auth;
     boolean isNightMode;
 
     @Override
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity {
         return super.dispatchTouchEvent( event );
     }
 
-    private void updateUserStatus(String state)
+    public static void updateUserStatus(String state)
     {
         String saveCurrentTime, saveCurrentDate;
 

@@ -14,8 +14,11 @@ import com.example.blitz.Fragment.ContactsFragment;
 import com.example.blitz.Models.Users;
 import com.example.blitz.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -43,6 +46,24 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
         holder.contactName.setText(user.getUserName());
         holder.contactStatus.setText(user.getStatus());
         holder.contactMobile.setText(user.getMobile());
+
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("Users").child(user.getUserId());
+        ref.child("userState").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    String state = snapshot.getValue().toString();
+                    if (state.equals("online")) {
+                        holder.onlineIcon.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        holder.onlineIcon.setVisibility(View.GONE);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
 
         if (ContactsFragment.friendList.contains(user.getUserId())) {
             holder.itemView.findViewById(R.id.addfr_btn).setVisibility(View.GONE);

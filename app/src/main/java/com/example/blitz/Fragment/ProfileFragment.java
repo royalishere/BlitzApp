@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.blitz.Change_info;
+import com.example.blitz.MainActivity;
 import com.example.blitz.Models.Users;
 import com.example.blitz.R;
 import com.example.blitz.SignInActivity;
@@ -279,7 +280,7 @@ public class ProfileFragment extends Fragment {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                MainActivity.updateUserStatus("offline");
                 //if user login with google
                 if (acct != null) {
                     mGoogleSignInClient.signOut();
@@ -305,17 +306,10 @@ public class ProfileFragment extends Fragment {
                     Toast.makeText(getActivity(), "Logout", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(getActivity(), SignInActivity.class);
 
-
-
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-
-
                 }
-
-
-
             }
         });
 

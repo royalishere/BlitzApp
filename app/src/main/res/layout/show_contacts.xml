@@ -44,10 +44,11 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="10dp"
                 android:layout_marginLeft="32dp"
+                android:layout_marginRight="10dp"
                 android:src="@drawable/background_button"
-                android:visibility="invisible" />
+                android:tint="#4CAF50"
+                android:visibility="gone" />
 
         </LinearLayout>
 
