@@ -73,8 +73,30 @@ public class ContactsFragment extends Fragment {
                         public void onCancelled(@NonNull DatabaseError error) {}
                     });
                 }
+                else if(searchText.startsWith("@")) {
+                    // search by email
+                    searchText = searchText.substring(1);
+                    database.getReference().child("Users").orderByChild("mail").startAt(searchText).endAt(searchText+"\uf8ff").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            usersList.clear();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren())
+                            {
+                                if (dataSnapshot.getKey().equals(auth.getCurrentUser().getUid())) continue;
+                                Users user = dataSnapshot.getValue(Users.class);
+                                user.setUserId(dataSnapshot.getKey());
+                                usersList.add(user);
+                            }
+                            adapter = new ContactAdapter(usersList, getContext());
+                            binding.contactRecyclerView.setAdapter(adapter);
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {}
+                    });
+                }
                 else
                 {
+                    // search by username
                     database.getReference().child("Users").orderByChild("userName").startAt(searchText).endAt(searchText+"\uf8ff").addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -89,11 +111,9 @@ public class ContactsFragment extends Fragment {
                             adapter = new ContactAdapter(usersList, getContext());
                             binding.contactRecyclerView.setAdapter(adapter);
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {}
                     });
-
                 }
             }
             return false;

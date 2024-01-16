@@ -19,6 +19,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -73,11 +74,12 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     Users user_sender, user_receiver;
 
-    String checker="",myUrl="";
+    String checker = "", myUrl = "", blockId = "";
 
     StorageTask uploadTask;
 
     Uri fileUri;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +95,6 @@ public class ChatDetailActivity extends AppCompatActivity {
         builder.setCancelable(false); // if you want user to wait for some process to finish,
         builder.setView(R.layout.process);
         AlertDialog dialog = builder.create();
-
-
 
 
         final String senderId = auth.getUid();
@@ -113,7 +113,6 @@ public class ChatDetailActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 user_receiver = snapshot.getValue(Users.class);
-
             }
 
             @Override
@@ -133,7 +132,6 @@ public class ChatDetailActivity extends AppCompatActivity {
         });
 
 
-
         binding.backArrow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,7 +148,26 @@ public class ChatDetailActivity extends AppCompatActivity {
         final String senderRoom = senderId + receiverId;
         final String receiverRoom = receiverId + senderId;
         dialog.show();
-        database.getReference().child("chats").child(senderRoom)
+        // handle block conversation
+        database.getReference().child("chats").child(senderRoom).child("BlockId").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    blockId = snapshot.getValue().toString();
+                    binding.chatbar.setVisibility(View.GONE);
+                    binding.blockNoti.setVisibility(View.VISIBLE);
+                }
+                else {
+                    binding.chatbar.setVisibility(View.VISIBLE);
+                    binding.blockNoti.setVisibility(View.GONE);
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {}
+        });
+        // handle display msg
+        database.getReference().child("chats").child(senderRoom).child("Messages")
                 .addValueEventListener(new ValueEventListener() {
 
                     @Override
@@ -158,8 +175,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                         messages.clear();
                         for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                             Message message = snapshot1.getValue(Message.class);
-                            if(senderId.equals(receiverId))
-                            {
+                            if (senderId.equals(receiverId)) {
                                 message.setuId("myself");
                             }
                             //----------
@@ -214,7 +230,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                 String messageTxt = binding.chatEditText.getText().toString();
                 //encrypt message
                 try {
-                    messageTxt = AESCrypt.encrypt(getString(R.string.key_encrypt),messageTxt);
+                    messageTxt = AESCrypt.encrypt(getString(R.string.key_encrypt), messageTxt);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -224,30 +240,26 @@ public class ChatDetailActivity extends AppCompatActivity {
                 message.setType("text");
 
                 binding.chatEditText.setText("");
-                database.getReference().child("chats").child(senderRoom).push().setValue(message)
+                database.getReference().child("chats").child(senderRoom).child("Messages").push().setValue(message)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void unused) {
-                                if(!senderRoom.equals(receiverRoom)) {
-                                    database.getReference().child("chats").child(receiverRoom).push().setValue(message)
+                                if (!senderRoom.equals(receiverRoom)) {
+                                    database.getReference().child("chats").child(receiverRoom).child("Messages").push().setValue(message)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
                                                     //make body of notification
                                                     String body;
-                                                    try{
-                                                        body = AESCrypt.decrypt(getString(R.string.key_encrypt),message.getMessage());
-                                                    }
-                                                    catch (Exception e)
-                                                    {
+                                                    try {
+                                                        body = AESCrypt.decrypt(getString(R.string.key_encrypt), message.getMessage());
+                                                    } catch (Exception e) {
                                                         throw new RuntimeException(e);
                                                     }
-                                                    body = user_sender.getUserName()+": "+body;
-                                                    try{
-                                                        body = AESCrypt.encrypt(getString(R.string.key_encrypt),body);
-                                                    }
-                                                    catch (Exception e)
-                                                    {
+                                                    body = user_sender.getUserName() + ": " + body;
+                                                    try {
+                                                        body = AESCrypt.encrypt(getString(R.string.key_encrypt), body);
+                                                    } catch (Exception e) {
                                                         throw new RuntimeException(e);
                                                     }
                                                     FCMSend.pushNotification(ChatDetailActivity.this,
@@ -263,7 +275,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                         });
             }
         });
-        binding.imageView.setOnClickListener(new View.OnClickListener() {
+        binding.detailBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //show dialog to edit profile
@@ -280,11 +292,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                     CL_topbackground.setBackground(getResources().getDrawable(R.drawable.dark_background));
 
 
-
-
-
-                }
-                else if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
+                } else if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_NO) {
                     LinearLayout LL1 = (LinearLayout) dialogView.findViewById(R.id.LL1);
                     LL1.setBackground(getResources().getDrawable(R.drawable.white_background));
 
@@ -292,8 +300,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                     CL_topbackground.setBackground(getResources().getDrawable(R.drawable.top_background));
 
 
-                }
-                else {
+                } else {
                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 }
 
@@ -304,14 +311,7 @@ public class ChatDetailActivity extends AppCompatActivity {
                 TextView tvEmail = dialogView.findViewById(R.id.tvEmail);
                 ImageView avt = dialogView.findViewById(R.id.avt);
 
-                //get the profile picture from storage
-                StorageReference reference = storage.getReference().child("profile_pictures").child(receiverId);
-                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Picasso.get().load(uri).into(avt);
-                    }
-                });
+                Picasso.get().load(profilePic).placeholder(R.drawable.hacker).into(avt);
 
                 database.getReference().child("Users").child(receiverId)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -339,9 +339,36 @@ public class ChatDetailActivity extends AppCompatActivity {
                 if (dialog.getWindow() != null) {
                     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 }
-            };
-        });
 
+                Button block_btn = dialogView.findViewById(R.id.btn_block);
+                if(blockId.equals(senderId))
+                {
+                    block_btn.setText("Unblock");
+                }
+                block_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(blockId.equals(senderId))
+                        {
+                            database.getReference().child("chats").child(senderRoom).child("BlockId").removeValue();
+                            database.getReference().child("chats").child(receiverRoom).child("BlockId").removeValue();
+                            blockId = "";
+                            block_btn.setText("Block");
+                        }
+                        else if (blockId.equals(""))
+                        {
+                            database.getReference().child("chats").child(senderRoom).child("BlockId").setValue(senderId);
+                            database.getReference().child("chats").child(receiverRoom).child("BlockId").setValue(senderId);
+                            block_btn.setText("Unblock");
+                        }
+                        else
+                        {
+                            Toast.makeText(ChatDetailActivity.this, "You are blocked by this user", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
 
 
         //send file
@@ -398,13 +425,12 @@ public class ChatDetailActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode==438 && resultCode==RESULT_OK && data!=null && data.getData()!=null)
-        {
+        if (requestCode == 438 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             // Progress Dialog
             AlertDialog.Builder builder = new AlertDialog.Builder(ChatDetailActivity.this);
             builder.setCancelable(false); // if you want user to wait for some process to finish,
@@ -415,8 +441,7 @@ public class ChatDetailActivity extends AppCompatActivity {
             dialog.show();
 
             fileUri = data.getData();
-            if (!checker.equals("image"))
-            {
+            if (!checker.equals("image")) {
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Document Files");
                 //get uid
                 final String senderId = auth.getUid();
@@ -426,13 +451,13 @@ public class ChatDetailActivity extends AppCompatActivity {
                 final String senderRoom = senderId + receiverId;
                 final String receiverRoom = receiverId + senderId;
 
-                DatabaseReference user_sender_message_key = database.getReference().child("chats").child(senderRoom).push();
-                DatabaseReference user_receiver_message_key = database.getReference().child("chats").child(receiverRoom).push();
+                DatabaseReference user_sender_message_key = database.getReference().child("chats").child(senderRoom).child("Messages").push();
+                DatabaseReference user_receiver_message_key = database.getReference().child("chats").child(receiverRoom).child("Messages").push();
 
                 final String messagePushId_sender = user_sender_message_key.getKey();
                 final String messagePushId_receiver = user_receiver_message_key.getKey();
 
-                StorageReference filePath = storageReference.child(messagePushId_sender );
+                StorageReference filePath = storageReference.child(messagePushId_sender);
 
                 filePath.putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -444,12 +469,12 @@ public class ChatDetailActivity extends AppCompatActivity {
                             message.setTimestamp(new Date().getTime());
                             message.setType(checker);
 
-                            database.getReference().child("chats").child(senderRoom).push().setValue(message)
+                            database.getReference().child("chats").child(senderRoom).child("Messages").push().setValue(message)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             if (!senderRoom.equals(receiverRoom)) {
-                                                database.getReference().child("chats").child(receiverRoom).push().setValue(message)
+                                                database.getReference().child("chats").child(receiverRoom).child("Messages").push().setValue(message)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void unused) {
@@ -488,14 +513,13 @@ public class ChatDetailActivity extends AppCompatActivity {
                     public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
                         double p = (100.0 * snapshot.getBytesTransferred()) / snapshot.getTotalByteCount();
                         builder.setTitle("Sending file")
-                                .setMessage("Please wait..."+(int)p+"%")
+                                .setMessage("Please wait..." + (int) p + "%")
                                 .setCancelable(false);
                         dialog.show();
 
                     }
                 });
-            }
-            else if (checker.equals("image")) {
+            } else if (checker.equals("image")) {
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference().child("Image Files");
                 //get uid
                 final String senderId = auth.getUid();
@@ -505,13 +529,13 @@ public class ChatDetailActivity extends AppCompatActivity {
                 final String senderRoom = senderId + receiverId;
                 final String receiverRoom = receiverId + senderId;
 
-                DatabaseReference user_sender_message_key = database.getReference().child("chats").child(senderRoom).push();
-                DatabaseReference user_receiver_message_key = database.getReference().child("chats").child(receiverRoom).push();
+                DatabaseReference user_sender_message_key = database.getReference().child("chats").child(senderRoom).child("Messages").push();
+                DatabaseReference user_receiver_message_key = database.getReference().child("chats").child(receiverRoom).child("Messages").push();
 
                 final String messagePushId_sender = user_sender_message_key.getKey();
                 final String messagePushId_receiver = user_receiver_message_key.getKey();
 
-                StorageReference filePath = storageReference.child(messagePushId_sender );
+                StorageReference filePath = storageReference.child(messagePushId_sender);
 
                 uploadTask = filePath.putFile(fileUri);
                 uploadTask.continueWithTask(new Continuation() {
@@ -536,19 +560,19 @@ public class ChatDetailActivity extends AppCompatActivity {
                             message.setTimestamp(new Date().getTime());
                             message.setType("image");
 
-                            database.getReference().child("chats").child(senderRoom).push().setValue(message)
+                            database.getReference().child("chats").child(senderRoom).child("Messages").push().setValue(message)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void unused) {
                                             if (!senderRoom.equals(receiverRoom)) {
-                                                database.getReference().child("chats").child(receiverRoom).push().setValue(message)
+                                                database.getReference().child("chats").child(receiverRoom).child("Messages").push().setValue(message)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                             @Override
                                                             public void onSuccess(Void unused) {
                                                                 //make body of notification
                                                                 String body;
 
-                                                                body = user_sender.getUserName() + ": sent a photo" ;
+                                                                body = user_sender.getUserName() + ": sent a photo";
                                                                 try {
                                                                     body = AESCrypt.encrypt(getString(R.string.key_encrypt), body);
                                                                 } catch (Exception e) {
@@ -573,28 +597,10 @@ public class ChatDetailActivity extends AppCompatActivity {
                 });
             }
 
-        }}
+        }
+    }
+
     public interface OnListItemClick {
         void onClick(View view, int position);
     }
-
-//    private void DisplayLastSeen() {
-//        database.getReference().child("Users").child(user_sender.getUserId()).addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                if (snapshot.child("userState").child("state").getValue().toString().equals("online")) {
-////                    binding.lastMessage.setText("online");
-//                    user
-//                } else {
-//                    long last_seen = Long.parseLong(snapshot.child("lastSeen").getValue().toString());
-//                    String lastSeen = TimeAgo.getTimeAgo(last_seen, getApplicationContext());
-//                    binding.lastSeen.setText(lastSeen);
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//            }
-//        });
-//    }
 }
