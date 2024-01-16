@@ -77,11 +77,8 @@ public class ChatAdapter extends RecyclerView.Adapter{
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = messages.get(position);
-        // retreive roomID
-        String senderId = FirebaseAuth.getInstance().getUid();
-        String receiverId = message.getuId()== "myself" ? senderId:message.getuId();
-        senderRoom = senderId + receiverId;
-        receiverRoom = receiverId + senderId;
+        senderRoom = ChatDetailActivity.senderRoom;
+        receiverRoom = ChatDetailActivity.receiverRoom;
 
         switch (message.getType()) {
             case "text":
@@ -339,7 +336,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
             builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    database.getReference().child("chats").child(senderRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    database.getReference().child("chats").child(senderRoom).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -361,7 +358,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
                             }
                         }
                     });
-                    database.getReference().child("chats").child(receiverRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    database.getReference().child("chats").child(receiverRoom).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -395,7 +392,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
             builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    database.getReference().child("chats").child(senderRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    database.getReference().child("chats").child(senderRoom).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -411,7 +408,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
                             }
                         }
                     });
-                    database.getReference().child("chats").child(receiverRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    database.getReference().child("chats").child(receiverRoom).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -439,7 +436,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
             builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    database.getReference().child("chats").child(senderRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    database.getReference().child("chats").child(senderRoom).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -456,7 +453,7 @@ public class ChatAdapter extends RecyclerView.Adapter{
                             }
                         }
                     });
-                    database.getReference().child("chats").child(receiverRoom).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                    database.getReference().child("chats").child(receiverRoom).child("Messages").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
                         @Override
                         public void onSuccess(DataSnapshot dataSnapshot) {
                             for (DataSnapshot ds : dataSnapshot.getChildren()) {

@@ -74,6 +74,7 @@ public class ChatDetailActivity extends AppCompatActivity {
 
     Users user_sender, user_receiver;
 
+    public static String senderRoom, receiverRoom;
     String checker = "", myUrl = "", blockId = "";
 
     StorageTask uploadTask;
@@ -145,8 +146,8 @@ public class ChatDetailActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         binding.chatRecyclerView.setLayoutManager(layoutManager);
 
-        final String senderRoom = senderId + receiverId;
-        final String receiverRoom = receiverId + senderId;
+        senderRoom = senderId + receiverId;
+        receiverRoom = receiverId + senderId;
         dialog.show();
         // handle block conversation
         database.getReference().child("chats").child(senderRoom).child("BlockId").addValueEventListener(new ValueEventListener() {
