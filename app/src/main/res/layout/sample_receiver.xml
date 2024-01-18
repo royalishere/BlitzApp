@@ -54,7 +54,12 @@
                 android:id="@+id/receiverText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="3dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="3dp"
+                android:layout_marginBottom="3dp"
+                android:padding="5dp"
+                android:textSize="15dp"
+
                 android:inputType="text|textLongMessage|textMultiLine"
                 android:maxWidth="270dp"
                 android:minWidth="50dp"
@@ -122,5 +127,4 @@
             android:scaleType="fitCenter"
             android:src="@drawable/file" />
     </LinearLayout>
-
 </RelativeLayout>
