@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.blitz.ChatDetailActivity;
@@ -65,6 +66,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
+                            last_msg = last_msg.replaceAll("\\r|\\n", " ");
                             if (last_msg.length() > 20) {
                                 last_msg = last_msg.substring(0, 20) + "...";
                             }
@@ -124,7 +126,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder>{
                     }
                     else if(state.equals("offline")) {
                         holder.status.setText("Last visited: " + date + " " + time);
-                        holder.status.setTextColor(context.getResources().getColor(R.color.black));
+                        int color = holder.lastMessage.getCurrentTextColor();
+                        holder.status.setTextColor(color);
                     }
                     holder.status.setVisibility(View.VISIBLE);
                 }

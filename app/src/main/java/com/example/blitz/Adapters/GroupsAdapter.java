@@ -63,6 +63,7 @@ public class GroupsAdapter extends RecyclerView.Adapter<GroupsAdapter.ViewHolder
                             } catch (Exception e) {
                                 throw new RuntimeException(e);
                             }
+                            last_msg = last_msg.replaceAll("\\r|\\n", " ");
                             if (last_msg.length() > 10) {
                                 last_msg = last_msg.substring(0, 10) + "...";
                             }

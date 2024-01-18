@@ -123,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
-
-            recreate(); // Recreate the activity to apply the night mode immediately
         }
         else if (item.getItemId() == R.id.createGroup)
         {
